@@ -1,0 +1,482 @@
+/* ============================================================
+   Cinematic Birthday Site — all styles
+   Palette: navy #071A3D, black, gold #E8C97A, white
+   ============================================================ */
+
+:root {
+  --navy: #071a3d;
+  --navy-deep: #030d21;
+  --gold: #e8c97a;
+  --gold-soft: #f3e2b6;
+  --ink: #000000;
+  --paper: #ffffff;
+  --glass: rgba(255, 255, 255, 0.07);
+  --glass-border: rgba(232, 201, 122, 0.35);
+  --serif: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+}
+
+.bd-root {
+  position: relative;
+  min-height: 100vh;
+  background: radial-gradient(ellipse at 50% 0%, #0d2a5e 0%, var(--navy) 45%, var(--ink) 100%);
+  color: var(--paper);
+  font-family: var(--serif);
+  overflow-x: hidden;
+}
+
+.bd-root h1,
+.bd-root h2,
+.bd-root h3,
+.bd-root p,
+.bd-root button,
+.bd-root input {
+  font-family: var(--serif);
+}
+
+/* ---------- star canvas ---------- */
+.bd-stars {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ---------- butterflies ---------- */
+.bd-butterfly {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 26px;
+  height: 22px;
+  z-index: 9999;
+  pointer-events: none;
+  will-change: transform;
+}
+.bd-butterfly .wing {
+  position: absolute;
+  top: 0;
+  width: 13px;
+  height: 22px;
+  background: linear-gradient(140deg, var(--gold-soft), var(--gold) 60%, rgba(232, 201, 122, 0.35));
+  border-radius: 90% 10% 70% 30% / 80% 30% 70% 20%;
+  box-shadow: 0 0 10px rgba(232, 201, 122, 0.65);
+}
+.bd-butterfly .wing.left {
+  left: 0;
+  transform-origin: right center;
+  animation: bd-flap-left 0.28s ease-in-out infinite alternate;
+}
+.bd-butterfly .wing.right {
+  right: 0;
+  transform-origin: left center;
+  animation: bd-flap-right 0.28s ease-in-out infinite alternate;
+}
+.bd-butterfly.slow .wing.left,
+.bd-butterfly.slow .wing.right {
+  animation-duration: 0.42s;
+}
+.bd-butterfly .body {
+  position: absolute;
+  left: 50%;
+  top: 3px;
+  width: 2px;
+  height: 16px;
+  margin-left: -1px;
+  border-radius: 2px;
+  background: var(--gold-soft);
+}
+@keyframes bd-flap-left {
+  from { transform: rotateY(0deg) rotate(-8deg); }
+  to { transform: rotateY(75deg) rotate(6deg); }
+}
+@keyframes bd-flap-right {
+  from { transform: rotateY(0deg) rotate(8deg); }
+  to { transform: rotateY(-75deg) rotate(-6deg); }
+}
+
+/* ---------- shared bits ---------- */
+.bd-scene {
+  position: relative;
+  z-index: 2;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 6vh 5vw;
+  text-align: center;
+}
+.bd-title {
+  font-size: clamp(2rem, 5vw, 3.4rem);
+  letter-spacing: 0.12em;
+  color: var(--gold);
+  text-shadow: 0 0 24px rgba(232, 201, 122, 0.35);
+  margin: 0 0 0.4em;
+  font-weight: 400;
+}
+.bd-sub {
+  color: rgba(255, 255, 255, 0.72);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-size: 0.78rem;
+  margin: 0 0 2rem;
+}
+.bd-glass {
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-radius: 22px;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+.bd-btn {
+  cursor: pointer;
+  border: 1px solid var(--gold);
+  background: linear-gradient(120deg, rgba(232, 201, 122, 0.15), rgba(232, 201, 122, 0.04));
+  color: var(--gold);
+  padding: 0.75rem 1.9rem;
+  border-radius: 999px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+}
+.bd-btn:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(120deg, rgba(232, 201, 122, 0.3), rgba(232, 201, 122, 0.1));
+  box-shadow: 0 0 26px rgba(232, 201, 122, 0.35);
+}
+.bd-fade-in { animation: bd-fade 1.1s ease both; }
+@keyframes bd-fade {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* full-screen black curtain used for scene transitions */
+.bd-curtain {
+  position: fixed;
+  inset: 0;
+  background: #000;
+  z-index: 9998;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.9s ease;
+}
+.bd-curtain.on { opacity: 1; pointer-events: all; }
+
+/* ---------- Scene 1: lock ---------- */
+.bd-lock-card {
+  padding: 3rem 2.6rem;
+  width: min(420px, 92vw);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.2rem;
+}
+.bd-lock-card.shake { animation: bd-shake 0.45s ease; }
+@keyframes bd-shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-12px); }
+  40% { transform: translateX(11px); }
+  60% { transform: translateX(-7px); }
+  80% { transform: translateX(5px); }
+}
+.bd-avatar {
+  width: 128px;
+  height: 128px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--gold);
+  box-shadow: 0 0 34px rgba(232, 201, 122, 0.45);
+  background: var(--navy-deep);
+  animation: bd-halo 5s ease-in-out infinite;
+}
+@keyframes bd-halo {
+  0%, 100% { box-shadow: 0 0 26px rgba(232, 201, 122, 0.35); }
+  50% { box-shadow: 0 0 48px rgba(232, 201, 122, 0.6); }
+}
+.bd-pin {
+  width: 100%;
+  text-align: center;
+  letter-spacing: 1.1rem;
+  text-indent: 1.1rem;
+  font-size: 1.6rem;
+  padding: 0.7rem 0.4rem;
+  color: var(--paper);
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid var(--glass-border);
+  border-radius: 14px;
+  outline: none;
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+.bd-pin:focus { border-color: var(--gold); box-shadow: 0 0 18px rgba(232, 201, 122, 0.4); }
+.bd-pin.error {
+  border-color: #ff5f68;
+  box-shadow: 0 0 26px rgba(255, 60, 80, 0.65);
+}
+.bd-link {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.85rem;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.bd-hint { color: var(--gold); letter-spacing: 0.14em; font-size: 0.95rem; }
+
+/* ---------- Scene 2: gramophone ---------- */
+.bd-gramo {
+  width: min(380px, 70vw);
+  filter: drop-shadow(0 24px 40px rgba(0, 0, 0, 0.6));
+  transition: filter 0.8s ease, transform 0.8s ease;
+}
+.bd-gramo.playing {
+  filter: drop-shadow(0 0 45px rgba(232, 201, 122, 0.75)) drop-shadow(0 24px 40px rgba(0, 0, 0, 0.6));
+  transform: scale(1.03);
+}
+.bd-discs { display: flex; gap: 2.6rem; flex-wrap: wrap; justify-content: center; margin-top: 2rem; }
+.bd-disc-wrap { display: flex; flex-direction: column; align-items: center; gap: 0.8rem; }
+.bd-disc {
+  width: 118px;
+  height: 118px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 1px solid var(--glass-border);
+  background:
+    radial-gradient(circle, var(--gold) 0 12%, #111 12.5% 16%, transparent 16.5%),
+    repeating-radial-gradient(circle, #14161c 0 3px, #0a0b0f 3px 6px);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.6);
+  transition: box-shadow 0.4s ease, transform 0.4s ease;
+}
+.bd-disc:hover { transform: scale(1.05); }
+.bd-disc.spinning {
+  animation: bd-spin 3.2s linear infinite;
+  box-shadow: 0 0 34px rgba(232, 201, 122, 0.5);
+}
+@keyframes bd-spin { to { transform: rotate(360deg); } }
+.bd-disc-label { font-size: 0.95rem; letter-spacing: 0.1em; color: rgba(255, 255, 255, 0.85); }
+.bd-disc-label.active { color: var(--gold); }
+
+/* ---------- Scene 3: gallery ---------- */
+.bd-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 2rem;
+  width: min(1080px, 92vw);
+  margin-top: 2rem;
+}
+.bd-polaroid {
+  background: #fdfaf3;
+  padding: 12px 12px 44px;
+  border-radius: 4px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.55);
+  opacity: 0;
+  transform: translateY(38px) scale(0.9) rotate(var(--tilt, 0deg));
+  transition: opacity 0.9s ease, transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.bd-polaroid.visible { opacity: 1; transform: translateY(0) scale(1) rotate(var(--tilt, 0deg)); }
+.bd-polaroid:hover { transform: translateY(-8px) scale(1.04) rotate(0deg); }
+.bd-photo {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  display: block;
+  background: linear-gradient(135deg, #0d2a5e, #071a3d 60%, #000);
+  border-radius: 2px;
+}
+.bd-caption {
+  margin: 0.6rem 0 0;
+  color: #3a3326;
+  font-size: 1rem;
+  letter-spacing: 0.06em;
+  font-style: italic;
+}
+
+/* ---------- Scene 4: boat journey ---------- */
+.bd-journey { position: relative; height: 380vh; z-index: 2; }
+.bd-journey-sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+  background: linear-gradient(180deg, #061530 0%, #07234d 55%, #041027 100%);
+}
+.bd-moon-small {
+  position: absolute;
+  top: 8%;
+  right: 12%;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #fff, var(--gold-soft) 60%, rgba(232, 201, 122, 0.2));
+  box-shadow: 0 0 70px rgba(232, 201, 122, 0.55);
+}
+.bd-boat-outer {
+  position: absolute;
+  left: 50%;
+  top: 46%;
+  width: 260px;
+  margin-left: -130px;
+  will-change: transform; /* scroll-driven scale + S-curve sway */
+}
+.bd-boat-inner {
+  /* continuous sailing physics, independent of the scroll transform */
+  animation: bd-sail 4.6s ease-in-out infinite;
+  transform-origin: 50% 80%;
+}
+.bd-boat-inner img { width: 100%; display: block; filter: drop-shadow(0 18px 26px rgba(0, 0, 0, 0.55)); }
+@keyframes bd-sail {
+  0% { transform: translateY(0) rotate(-2.6deg); }
+  25% { transform: translateY(-9px) rotate(0deg); }
+  50% { transform: translateY(2px) rotate(2.6deg); }
+  75% { transform: translateY(-6px) rotate(0.6deg); }
+  100% { transform: translateY(0) rotate(-2.6deg); }
+}
+.bd-water {
+  position: absolute;
+  left: -50%;
+  width: 200%;
+  bottom: 0;
+  height: 42%;
+  will-change: transform;
+}
+.bd-water span {
+  position: absolute;
+  inset: 0;
+  background-repeat: repeat-x;
+  background-size: 340px 100%;
+}
+.bd-water.l1 { height: 30%; opacity: 0.55; }
+.bd-water.l1 span { background-image: radial-gradient(120px 34px at 60px 0, rgba(232, 201, 122, 0.22), transparent 70%); }
+.bd-water.l2 { height: 40%; opacity: 0.75; background: linear-gradient(180deg, rgba(9, 40, 84, 0.7), rgba(4, 16, 39, 0.95)); }
+.bd-water.l2 span { background-image: radial-gradient(160px 40px at 90px 0, rgba(255, 255, 255, 0.13), transparent 70%); }
+.bd-water.l3 { height: 22%; background: linear-gradient(180deg, rgba(3, 12, 30, 0.85), #01060f); }
+.bd-water.l3 span { background-image: radial-gradient(200px 30px at 120px 0, rgba(232, 201, 122, 0.16), transparent 70%); }
+
+.bd-place {
+  position: absolute;
+  left: 0;
+  top: 18%;
+  padding: 1.1rem 1.8rem;
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  border-radius: 0 18px 18px 0;
+  transform: translateX(-110%);
+  opacity: 0;
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.5s ease;
+}
+.bd-place.in { transform: translateX(0); opacity: 1; }
+.bd-place .icon { font-size: 1.7rem; }
+.bd-place .text { color: var(--gold); letter-spacing: 0.14em; font-size: 1.1rem; }
+.bd-journey-title {
+  position: absolute;
+  top: 6%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+}
+
+/* ---------- Scene 5 & 6: characters ---------- */
+.bd-walker {
+  width: min(280px, 60vw);
+  cursor: pointer;
+  animation: bd-walk-in 2.2s cubic-bezier(0.22, 1, 0.36, 1) both;
+  transition: transform 0.35s ease, filter 0.35s ease;
+  filter: drop-shadow(0 18px 30px rgba(0, 0, 0, 0.55));
+}
+.bd-walker.from-right { animation-name: bd-walk-in-right; }
+.bd-walker:hover { transform: scale(1.05); filter: drop-shadow(0 0 30px rgba(232, 201, 122, 0.5)); }
+.bd-walker-bounce { animation: bd-bounce 1.4s ease-in-out infinite; }
+@keyframes bd-walk-in {
+  0% { transform: translateX(-120vw) rotate(-6deg); }
+  100% { transform: translateX(0) rotate(0); }
+}
+@keyframes bd-walk-in-right {
+  0% { transform: translateX(120vw) rotate(6deg); }
+  100% { transform: translateX(0) rotate(0); }
+}
+@keyframes bd-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-14px); }
+}
+.bd-tap { color: rgba(255, 255, 255, 0.6); font-size: 0.85rem; letter-spacing: 0.2em; text-transform: uppercase; }
+
+/* rose (scene 6) */
+.bd-rose {
+  cursor: pointer;
+  font-size: 3rem;
+  line-height: 1;
+  transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1), filter 0.8s ease;
+  filter: drop-shadow(0 0 10px rgba(255, 90, 110, 0.4));
+}
+.bd-rose.bloom { transform: scale(2.1); filter: drop-shadow(0 0 34px rgba(255, 90, 110, 0.85)); }
+
+/* ---------- overlays ---------- */
+.bd-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9997;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5vh 5vw;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(6px);
+  animation: bd-fade 0.5s ease both;
+}
+.bd-letter {
+  width: min(620px, 92vw);
+  max-height: 84vh;
+  overflow-y: auto;
+  padding: 3rem 2.6rem;
+  border-radius: 8px;
+  color: #40331f;
+  background:
+    radial-gradient(circle at 20% 15%, rgba(255, 255, 255, 0.7), transparent 55%),
+    linear-gradient(160deg, #f6e7c6, #e9d3a6 60%, #dcc491);
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.65);
+  animation: bd-scale-in 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.bd-letter h3 { font-size: 2rem; margin: 0 0 1rem; }
+.bd-letter p { font-size: 1.25rem; line-height: 1.9; font-style: italic; }
+.bd-letter .cursive { font-family: "Segoe Script", "Brush Script MT", cursive; }
+.bd-info {
+  width: min(520px, 92vw);
+  padding: 2.6rem;
+  animation: bd-scale-in 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes bd-scale-in {
+  from { opacity: 0; transform: scale(0.9) translateY(20px); }
+  to { opacity: 1; transform: none; }
+}
+.bd-close {
+  margin-top: 1.6rem;
+  border: 1px solid rgba(64, 51, 31, 0.5);
+  background: rgba(255, 255, 255, 0.35);
+  color: #40331f;
+  padding: 0.6rem 1.6rem;
+  border-radius: 999px;
+  cursor: pointer;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+}
+
+/* ---------- Scene 7: final ---------- */
+.bd-moon {
+  width: 170px;
+  height: 170px;
+  border-radius: 50%;
+  margin-bottom: 2.4rem;
+  background: radial-gradient(circle at 35% 32%, #fff, var(--gold-soft) 55%, rgba(232, 201, 122, 0.25));
+  box-shadow: 0 0 110px rgba(232, 201, 122, 0.55);
+  animation: bd-float 7s ease-in-out infinite;
+}
+@keyframes bd-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-18px); }
+}
