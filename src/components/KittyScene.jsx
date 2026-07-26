@@ -1,0 +1,41 @@
+import { useState } from "react";
+
+/** Scene 5 — kitty walks in with a bouquet; click to read the letter. */
+export default function KittyScene() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <section className="bd-scene">
+      <h2 className="bd-title">Someone Has Something For You</h2>
+      <p className="bd-sub">tap her to open the letter</p>
+
+      <div className="bd-walker" onClick={() => setOpen(true)} role="button" tabIndex={0}
+           onKeyDown={(e) => e.key === "Enter" && setOpen(true)}>
+        <div className="bd-walker-bounce">
+          <img src="/kitty.png" alt="Kitty holding a bouquet" style={{ width: "100%", display: "block" }} />
+        </div>
+      </div>
+      <p className="bd-tap">click me</p>
+
+      {open && (
+        <div className="bd-overlay" onClick={() => setOpen(false)}>
+          <div className="bd-letter" onClick={(e) => e.stopPropagation()}>
+            <h3 className="cursive">My dearest Rukmani,</h3>
+            <p className="cursive">
+              Happy birthday. Every good thing in my days seems to begin with you —
+              the quiet mornings, the silly laughs, the long nights of talking about
+              nothing at all. Thank you for being the kindest part of my world.
+              <br />
+              <br />
+              Here&apos;s to another year of us, sailing wherever the water takes us.
+            </p>
+            <p className="cursive" style={{ textAlign: "right" }}>— always yours ❤️</p>
+            <button type="button" className="bd-close" onClick={() => setOpen(false)}>
+              Close Letter
+            </button>
+          </div>
+        </div>
+      )}
+    </section>
+  );
+}
