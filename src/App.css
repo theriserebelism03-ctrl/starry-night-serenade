@@ -231,13 +231,14 @@
 /* ---------- CSS plumeria blossoms (decorative corners) ---------- */
 .bd-flowers {
   position: absolute;
-  width: 300px;
-  height: 240px;
+  width: 18.75em; /* 300px at base */
+  height: 15em; /* 240px at base */
+  font-size: clamp(0.4rem, 1vw + 0.25rem, 1.05rem);
   z-index: 1;
   pointer-events: none;
 }
-.bd-flowers-tr { top: -20px; right: -30px; }
-.bd-flowers-bl { bottom: -20px; left: -30px; transform: rotate(180deg); }
+.bd-flowers-tr { top: -1.25em; right: -1.875em; }
+.bd-flowers-bl { bottom: -1.25em; left: -1.875em; transform: rotate(180deg); }
 
 .bd-bloom {
   position: absolute;
@@ -245,7 +246,7 @@
   height: var(--sz);
   transform: rotate(var(--rot));
   animation: bd-bloom-sway 7s ease-in-out infinite;
-  filter: drop-shadow(0 10px 22px rgba(0, 0, 0, 0.45));
+  filter: drop-shadow(0 0.625em 1.375em rgba(0, 0, 0, 0.45));
 }
 .bd-bloom img {
   width: 100%;
@@ -255,10 +256,7 @@
 }
 @keyframes bd-bloom-sway {
   0%, 100% { transform: rotate(var(--rot)) translateY(0) scale(1); }
-  50% { transform: rotate(calc(var(--rot) + 4deg)) translateY(-8px) scale(1.03); }
-}
-@media (max-width: 640px) {
-  .bd-flowers { transform-origin: center; scale: 0.6; }
+  50% { transform: rotate(calc(var(--rot) + 4deg)) translateY(-0.5em) scale(1.03); }
 }
 
 .bd-gramo {
