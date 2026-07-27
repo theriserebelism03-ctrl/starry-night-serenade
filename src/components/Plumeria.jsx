@@ -1,16 +1,18 @@
 import plumeriaAsset from "@/assets/plumeria.png.asset.json";
 
+const pxToEm = (px) => `${px / 16}em`;
+
 /** Decorative plumeria blossom clusters. */
 function Bloom({ size = 120, rotate = 0, delay = 0, left = 0, top = 0 }) {
   return (
     <div
       className="bd-bloom"
       style={{
-        "--sz": `${size}px`,
+        "--sz": pxToEm(size),
         "--rot": `${rotate}deg`,
         animationDelay: `${delay}s`,
-        left: `${left}px`,
-        top: `${top}px`,
+        left: pxToEm(left),
+        top: pxToEm(top),
       }}
     >
       <img src={plumeriaAsset.url} alt="" loading="lazy" width={1024} height={1024} />
