@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import profileAsset from "../assets/profile.png.asset.json";
+import Plumeria from "./Plumeria.jsx";
 
 const PASSWORD = "2808";
 
@@ -45,6 +46,8 @@ export default function LockScreen({ onUnlock }) {
 
   return (
     <section className="bd-scene">
+      <Plumeria corner="tr" />
+      <Plumeria corner="bl" />
       <form
         onSubmit={submit}
         className={`bd-glass bd-lock-card bd-fade-in${error ? " shake" : ""}`}
