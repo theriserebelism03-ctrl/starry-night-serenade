@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import profileAsset from "../assets/profile.png.asset.json";
 
 const PASSWORD = "2808";
 
