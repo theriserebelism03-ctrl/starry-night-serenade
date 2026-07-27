@@ -251,20 +251,19 @@
   position: absolute;
   left: 50%;
   top: 50%;
-  width: 42%;
-  height: 52%;
-  margin-left: -21%;
+  width: 50%;
+  height: 60%;
+  margin-left: -25%;
   transform-origin: 50% 100%;
-  transform: rotate(calc(var(--i) * 72deg)) translateY(-46%) rotate(18deg);
-  border-radius: 70% 30% 55% 45% / 90% 85% 25% 20%;
+  transform: rotate(calc(var(--i) * 72deg)) translateY(-8%) rotate(14deg);
+  border-radius: 60% 40% 50% 50% / 85% 80% 22% 22%;
   background: radial-gradient(
-    120% 110% at 50% 95%,
-    #f7d045 0 12%,
-    #f9de74 26%,
-    #fdf3cf 48%,
-    #ffffff 72%
+    140% 130% at 42% 100%,
+    #f6c62c 0 10%,
+    #fadf7d 30%,
+    #fdf4d4 55%,
+    #ffffff 78%
   );
-  box-shadow: inset 0 -6px 12px rgba(226, 176, 48, 0.35);
 }
 .bd-bloom-core {
   position: absolute;
