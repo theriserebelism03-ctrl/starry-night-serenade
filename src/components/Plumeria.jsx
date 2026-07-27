@@ -1,7 +1,6 @@
-/**
- * Pure-CSS plumeria (frangipani) blossoms — no images.
- * Rendered as decorative corner clusters.
- */
+import plumeriaAsset from "@/assets/plumeria.png.asset.json";
+
+/** Decorative plumeria blossom clusters. */
 function Bloom({ size = 120, rotate = 0, delay = 0, left = 0, top = 0 }) {
   return (
     <div
@@ -14,10 +13,7 @@ function Bloom({ size = 120, rotate = 0, delay = 0, left = 0, top = 0 }) {
         top: `${top}px`,
       }}
     >
-      {[0, 1, 2, 3, 4].map((i) => (
-        <span key={i} className="bd-petal" style={{ "--i": i }} />
-      ))}
-      <span className="bd-bloom-core" />
+      <img src={plumeriaAsset.url} alt="" loading="lazy" width={1024} height={1024} />
     </div>
   );
 }
