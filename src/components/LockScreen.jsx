@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import profileAsset from "../assets/profile.png.asset.json";
 
 const PASSWORD = "2808";
 
@@ -48,7 +49,7 @@ export default function LockScreen({ onUnlock }) {
         onSubmit={submit}
         className={`bd-glass bd-lock-card bd-fade-in${error ? " shake" : ""}`}
       >
-        <img className="bd-avatar" src="/profile.png" alt="Portrait" />
+        <img className="bd-avatar" src={profileAsset.url} alt="Portrait" />
         <h1 className="bd-title" style={{ fontSize: "2rem" }}>
           Enter Password
         </h1>
