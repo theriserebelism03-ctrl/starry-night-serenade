@@ -247,33 +247,11 @@
   animation: bd-bloom-sway 7s ease-in-out infinite;
   filter: drop-shadow(0 10px 22px rgba(0, 0, 0, 0.45));
 }
-.bd-petal {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 50%;
-  height: 60%;
-  margin-left: -25%;
-  transform-origin: 50% 100%;
-  transform: rotate(calc(var(--i) * 72deg)) translateY(-8%) rotate(14deg);
-  border-radius: 60% 40% 50% 50% / 85% 80% 22% 22%;
-  background: radial-gradient(
-    140% 130% at 42% 100%,
-    #f6c62c 0 10%,
-    #fadf7d 30%,
-    #fdf4d4 55%,
-    #ffffff 78%
-  );
-}
-.bd-bloom-core {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 34%;
-  height: 34%;
-  margin: -17% 0 0 -17%;
-  border-radius: 50%;
-  background: radial-gradient(circle, #f6c62c 0 30%, rgba(250, 223, 125, 0.75) 60%, rgba(250, 223, 125, 0) 100%);
+.bd-bloom img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
 }
 @keyframes bd-bloom-sway {
   0%, 100% { transform: rotate(var(--rot)) translateY(0) scale(1); }
