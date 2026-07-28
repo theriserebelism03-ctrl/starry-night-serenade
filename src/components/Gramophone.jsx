@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { createMelodyPlayer, MELODY_A, MELODY_B } from "../lib/synth.js";
+import kalyaniAudio from "../assets/kalyani.mp3.asset.json";
 
 /** Track list — mp3 files live in /public (add your own to override the synth). */
 const TRACKS = [
-  { id: 0, name: "Perfect", src: "/song1.mp3", melody: MELODY_A },
+  { id: 0, name: "Kalyani", src: kalyaniAudio.url, melody: MELODY_A, loop: true },
   { id: 1, name: "Until I Found You", src: "/song2.mp3", melody: MELODY_B },
 ];
 
@@ -31,6 +32,10 @@ export default function Gramophone({ onContinue, audioRef }) {
       const player = createMelodyPlayer(TRACKS[index].melody);
       fallbackRef.current = player;
       player.start(() => {
+        if (TRACKS[index].loop) {
+          playFallback(index);
+          return;
+        }
         // auto-chain into the next track with no pause
         const next = (index + 1) % TRACKS.length;
         if (next !== index) {
@@ -50,6 +55,7 @@ export default function Gramophone({ onContinue, audioRef }) {
       stopFallback();
       if (!audio) return;
       audio.src = TRACKS[index].src;
+      audio.loop = Boolean(TRACKS[index].loop);
       audio.currentTime = 0;
       const attempt = audio.play();
       if (attempt && attempt.catch) {
@@ -65,6 +71,7 @@ export default function Gramophone({ onContinue, audioRef }) {
     if (!audio) return;
     const onEnded = () => {
       if (current === null) return;
+      if (TRACKS[current].loop) return;
       const next = (current + 1) % TRACKS.length;
       if (next !== current) play(next);
     };
