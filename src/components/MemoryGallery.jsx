@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const PHOTOS = [
   { caption: "First Hello", file: "photo1.png" },
@@ -14,57 +14,73 @@ const PHOTOS = [
 ];
 
 /**
- * Scene 3 — horizontal scroll-driven polaroid slideshow.
- * Scroll sideways to scrub through the frames like a film strip.
- * Each polaroid fades/scales in as it enters the viewport.
+ * Scene 3 — vertical scroll-driven polaroid slideshow.
+ * One polaroid is visible at a time; scroll down to reveal the next frame.
  */
 export default function MemoryGallery() {
-  const trackRef = useRef(null);
+  const sectionRef = useRef(null);
+  const [active, setActive] = useState(0);
+  const activeRef = useRef(0);
 
   useEffect(() => {
-    const cards = trackRef.current ? Array.from(trackRef.current.children) : [];
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          const index = cards.indexOf(entry.target);
-          if (entry.isIntersecting) {
-            window.setTimeout(() => entry.target.classList.add("visible"), (index % 5) * 90);
-          } else if (entry.boundingClientRect.left > 0) {
-            // reset only frames that are still off-screen to the right
-            entry.target.classList.remove("visible");
-          }
-        });
-      },
-      { threshold: 0.55, root: trackRef.current },
-    );
-    cards.forEach((c) => observer.observe(c));
-    return () => observer.disconnect();
+    let frame = null;
+
+    const update = () => {
+      frame = null;
+      const el = sectionRef.current;
+      if (!el) return;
+      const total = el.offsetHeight - window.innerHeight;
+      const p = Math.min(1, Math.max(0, -el.getBoundingClientRect().top / (total || 1)));
+      const idx = Math.min(PHOTOS.length - 1, Math.floor(p * PHOTOS.length));
+      if (idx !== activeRef.current) {
+        activeRef.current = idx;
+        setActive(idx);
+      }
+    };
+
+    const onScroll = () => {
+      if (frame === null) frame = requestAnimationFrame(update);
+    };
+
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      if (frame) cancelAnimationFrame(frame);
+    };
   }, []);
 
   return (
-    <section className="bd-scene bd-gallery-scene">
-      <h2 className="bd-title">Our Memories</h2>
-      <p className="bd-sub">scroll sideways to reveal each moment</p>
+    <section className="bd-gallery-journey" ref={sectionRef}>
+      <div className="bd-gallery-sticky">
+        <h2 className="bd-title">Our Memories</h2>
+        <p className="bd-sub">scroll down to see them one by one</p>
 
-      <div className="bd-gallery-track" ref={trackRef}>
-        {PHOTOS.map((photo, i) => (
-          <figure
-            className="bd-polaroid"
-            key={photo.caption}
-            style={{ "--tilt": `${(i % 3) - 1}deg`, "--i": i }}
-          >
-            <img
-              className="bd-photo"
-              src={`/${photo.file}`}
-              alt={photo.caption}
-              loading="lazy"
-              onError={(e) => {
-                e.currentTarget.style.background = "linear-gradient(135deg, #0d2a5e, #071a3d 60%, #000)";
-              }}
-            />
-            <figcaption className="bd-caption">{photo.caption}</figcaption>
-          </figure>
-        ))}
+        <div className="bd-polaroid-stage">
+          {PHOTOS.map((photo, i) => (
+            <figure
+              className={`bd-polaroid${active === i ? " active" : ""}`}
+              key={photo.caption}
+              style={{ "--tilt": `${(i % 3) - 1}deg`, "--i": i }}
+            >
+              <img
+                className="bd-photo"
+                src={`/${photo.file}`}
+                alt={photo.caption}
+                loading="lazy"
+              />
+              <figcaption className="bd-caption">{photo.caption}</figcaption>
+            </figure>
+          ))}
+        </div>
+
+        <div className="bd-gallery-dots">
+          {PHOTOS.map((_, i) => (
+            <span key={i} className={active === i ? "active" : ""} />
+          ))}
+        </div>
       </div>
     </section>
   );
