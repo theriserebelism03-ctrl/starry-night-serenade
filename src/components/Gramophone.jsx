@@ -32,6 +32,10 @@ export default function Gramophone({ onContinue, audioRef }) {
       const player = createMelodyPlayer(TRACKS[index].melody);
       fallbackRef.current = player;
       player.start(() => {
+        if (TRACKS[index].loop) {
+          playFallback(index);
+          return;
+        }
         // auto-chain into the next track with no pause
         const next = (index + 1) % TRACKS.length;
         if (next !== index) {
