@@ -1,11 +1,12 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { createMelodyPlayer, MELODY_A, MELODY_B } from "../lib/synth.js";
 import kalyaniAudio from "../assets/kalyani.mp3.asset.json";
+import amshamAudio from "../assets/track2.mp3.asset.json";
 
 /** Track list — mp3 files live in /public (add your own to override the synth). */
 const TRACKS = [
   { id: 0, name: "Kalyani", src: kalyaniAudio.url, melody: MELODY_A, loop: true },
-  { id: 1, name: "Until I Found You", src: "/song2.mp3", melody: MELODY_B },
+  { id: 1, name: "Amsham", src: amshamAudio.url, melody: MELODY_B },
 ];
 
 /**
