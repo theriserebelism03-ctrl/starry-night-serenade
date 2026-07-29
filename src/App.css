@@ -21,7 +21,8 @@
   background: radial-gradient(ellipse at 50% 0%, #0d2a5e 0%, var(--navy) 45%, var(--ink) 100%);
   color: var(--paper);
   font-family: var(--serif);
-  overflow-x: hidden;
+  /* clip (not hidden) so descendant position:sticky still pins to the viewport */
+  overflow-x: clip;
 }
 
 .bd-root h1,
