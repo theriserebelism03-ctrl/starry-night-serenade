@@ -294,7 +294,7 @@
 /* ---------- Scene 3: gallery ---------- */
 .bd-gallery-journey {
   position: relative;
-  height: 450vh;
+  height: 700vh;
   z-index: 2;
 }
 .bd-gallery-sticky {
@@ -319,7 +319,7 @@
   position: absolute;
   inset: 0;
   background: #fdfaf3;
-  padding: 12px 12px 44px;
+  padding: 12px;
   border-radius: 4px;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.55);
   opacity: 0;
@@ -338,8 +338,7 @@
 .bd-polaroid:hover { transform: translateY(-8px) scale(1.04) rotate(0deg); }
 .bd-photo {
   width: 100%;
-  height: auto;
-  aspect-ratio: 1;
+  height: 100%;
   object-fit: cover;
   display: block;
   background: linear-gradient(135deg, #0d2a5e, #071a3d 60%, #000);
