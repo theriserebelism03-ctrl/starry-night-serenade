@@ -169,12 +169,12 @@
 
 /* ---------- Scene 1: lock ---------- */
 .bd-lock-card {
-  padding: 3rem 2.6rem;
-  width: min(420px, 92vw);
+  padding: 2.4rem 1rem;
+  width: min(360px, 92vw);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1.2rem;
+  gap: 1rem;
 }
 .bd-lock-card.shake { animation: bd-shake 0.45s ease; }
 @keyframes bd-shake {
@@ -227,6 +227,88 @@
   text-underline-offset: 4px;
 }
 .bd-hint { color: var(--gold); letter-spacing: 0.14em; font-size: 0.95rem; }
+
+/* ---------- dial pad lock ---------- */
+.bd-avatar-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  line-height: 0;
+  border-radius: 50%;
+}
+.bd-tap-hint { margin: 0; animation: bd-fade 1s ease both; }
+
+.bd-pad-wrap {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  transform: translateY(14px);
+  pointer-events: none;
+  transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.22, 1, 0.36, 1), max-height 0.7s ease;
+}
+.bd-pad-wrap.open {
+  opacity: 1;
+  max-height: 640px;
+  transform: none;
+  pointer-events: auto;
+}
+
+.bd-dots { display: flex; gap: 1rem; margin-bottom: 1.6rem; }
+.bd-dots span {
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  border: 1px solid var(--gold);
+  background: transparent;
+  transition: background 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+}
+.bd-dots span.filled {
+  background: var(--gold);
+  box-shadow: 0 0 14px rgba(232, 201, 122, 0.7);
+  transform: scale(1.12);
+}
+.bd-dots.error span {
+  border-color: #ff5f68;
+  background: rgba(255, 95, 104, 0.85);
+  box-shadow: 0 0 16px rgba(255, 60, 80, 0.6);
+}
+
+.bd-dialpad {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.9rem;
+  justify-items: center;
+}
+.bd-key {
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.5rem;
+  color: var(--paper);
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: transform 0.18s ease, background 0.25s ease, box-shadow 0.25s ease;
+}
+.bd-key:hover { background: rgba(232, 201, 122, 0.18); }
+.bd-key:active {
+  transform: scale(0.92);
+  background: rgba(232, 201, 122, 0.32);
+  box-shadow: 0 0 22px rgba(232, 201, 122, 0.45);
+}
+.bd-key.ghost { background: none; border-color: transparent; color: var(--gold); }
+.bd-pad-wrap .bd-link { margin-top: 1.4rem; }
+
+@media (max-width: 380px) {
+  .bd-key { width: 58px; height: 58px; font-size: 1.3rem; }
+}
 
 /* ---------- Scene 2: gramophone ---------- */
 /* ---------- CSS plumeria blossoms (decorative corners) ---------- */

@@ -1,14 +1,16 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import profileAsset from "../assets/profile.png.asset.json";
 import Plumeria from "./Plumeria.jsx";
 
 const PASSWORD = "2808";
+const KEYS = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "", "0", "del"];
 
 /** Scene 1 — password lock screen. */
 export default function LockScreen({ onUnlock }) {
   const [value, setValue] = useState("");
   const [error, setError] = useState(false);
   const [showHint, setShowHint] = useState(false);
+  const [revealed, setRevealed] = useState(false);
   const audioCtxRef = useRef(null);
 
   /** Short synthesized error tone (Web Audio API — no sound files). */
@@ -33,52 +35,88 @@ export default function LockScreen({ onUnlock }) {
     }
   };
 
-  const submit = (e) => {
-    e.preventDefault();
+  const press = (k) => {
+    if (k === "del") {
+      setValue((v) => v.slice(0, -1));
+      return;
+    }
+    if (!k) return;
+    setValue((v) => (v.length >= 4 ? v : v + k));
+  };
+
+  useEffect(() => {
+    if (value.length < 4) return;
     if (value === PASSWORD) {
       onUnlock();
       return;
     }
     setError(true);
     playErrorTone();
-    window.setTimeout(() => setError(false), 700);
-  };
+    const t = window.setTimeout(() => {
+      setError(false);
+      setValue("");
+    }, 700);
+    return () => window.clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [value]);
 
   return (
-    <section className="bd-scene">
+    <section className="bd-scene" onClick={() => setRevealed(true)}>
       <Plumeria corner="tr" />
       <Plumeria corner="bl" />
-      <form
-        onSubmit={submit}
-        className={`bd-glass bd-lock-card bd-fade-in${error ? " shake" : ""}`}
-      >
-        <img className="bd-avatar" src={profileAsset.url} alt="Portrait" />
-        <h1 className="bd-title" style={{ fontSize: "2rem" }}>
-          Enter Password
-        </h1>
-        <p className="bd-sub" style={{ margin: 0 }}>
-          for someone very special
-        </p>
-
-        <input
-          className={`bd-pin${error ? " error" : ""}`}
-          inputMode="numeric"
-          maxLength={4}
-          placeholder="••••"
-          value={value}
-          onChange={(e) => setValue(e.target.value.replace(/\D/g, "").slice(0, 4))}
-          aria-label="4 digit password"
-        />
-
-        <button type="submit" className="bd-btn">
-          Unlock
+      <div className={`bd-lock-card bd-fade-in${error ? " shake" : ""}`}>
+        <button
+          type="button"
+          className="bd-avatar-btn"
+          onClick={() => setRevealed(true)}
+          aria-label="Reveal passcode pad"
+        >
+          <img className="bd-avatar" src={profileAsset.url} alt="Portrait" />
         </button>
 
-        <button type="button" className="bd-link" onClick={() => setShowHint(true)}>
-          Forgot Password?
-        </button>
-        {showHint && <p className="bd-hint">Password : 2808 ❤️</p>}
-      </form>
+        {!revealed && <p className="bd-sub bd-tap-hint">Tap to unlock</p>}
+
+        <div className={`bd-pad-wrap${revealed ? " open" : ""}`} aria-hidden={!revealed}>
+          <p className="bd-sub" style={{ margin: "0 0 1rem" }}>
+            for someone very special
+          </p>
+
+          <div className={`bd-dots${error ? " error" : ""}`} role="status" aria-label="Passcode">
+            {[0, 1, 2, 3].map((i) => (
+              <span key={i} className={value.length > i ? "filled" : ""} />
+            ))}
+          </div>
+
+          <div className="bd-dialpad">
+            {KEYS.map((k, i) =>
+              k === "" ? (
+                <span key={i} />
+              ) : (
+                <button
+                  key={i}
+                  type="button"
+                  className={`bd-key${k === "del" ? " ghost" : ""}`}
+                  onClick={() => press(k)}
+                  tabIndex={revealed ? 0 : -1}
+                  aria-label={k === "del" ? "Delete" : k}
+                >
+                  {k === "del" ? "⌫" : k}
+                </button>
+              ),
+            )}
+          </div>
+
+          <button
+            type="button"
+            className="bd-link"
+            tabIndex={revealed ? 0 : -1}
+            onClick={() => setShowHint(true)}
+          >
+            Forgot Password?
+          </button>
+          {showHint && <p className="bd-hint">Password : 2808 ❤️</p>}
+        </div>
+      </div>
     </section>
   );
 }
