@@ -8,7 +8,6 @@ import Gramophone from "./components/Gramophone.jsx";
 import MemoryGallery from "./components/MemoryGallery.jsx";
 import BoatJourney from "./components/BoatJourney.jsx";
 import KittyScene from "./components/KittyScene.jsx";
-import CatScene from "./components/CatScene.jsx";
 import FinalScene from "./components/FinalScene.jsx";
 
 /**
@@ -66,7 +65,6 @@ export default function App() {
           <MemoryGallery />
           <BoatJourney />
           <KittyScene />
-          <CatScene />
           <FinalScene onExit={handleExit} />
         </>
       )}
