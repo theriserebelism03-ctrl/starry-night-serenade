@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 
 const PLACES = [
-  { icon: "🏝️", text: "Where it all began" },
-  { icon: "🌉", text: "The bridge at midnight" },
-  { icon: "⛩️", text: "That little temple town" },
-  { icon: "🎡", text: "The fair we never left" },
-  { icon: "🌙", text: "And onward, always" },
+  { icon: "🌱", text: "Our friendship started on Aug 25th" },
+  { icon: "🍱", text: "Our first convo for packing food" },
+  { icon: "🚌", text: "MGM trip" },
+  { icon: "🏺", text: "Sports day & pottery making" },
+  { icon: "🍛", text: "Canteen with 65 briyani" },
+  { icon: "🌇", text: "Waiting at evening" },
 ];
 
 /**
@@ -31,17 +32,17 @@ export default function BoatJourney() {
       const total = el.offsetHeight - window.innerHeight;
       const p = Math.min(1, Math.max(0, -rect.top / (total || 1))); // 0 → 1
 
-      // forward motion: gentle scale up + natural S-curve sway
-      const scale = 0.85 + p * 0.55;
-      const swayX = Math.sin(p * Math.PI * 2.2) * 130;
-      const swayY = Math.sin(p * Math.PI * 3.4) * 26;
+      // forward motion: sails left → right with a gentle bob and scale swell
+      const travel = (p - 0.5) * (window.innerWidth * 0.72);
+      const scale = 0.8 + Math.sin(p * Math.PI) * 0.35;
+      const swayY = Math.sin(p * Math.PI * 4) * 22;
       if (boatRef.current) {
         boatRef.current.style.transform =
-          `translate3d(${swayX}px, ${swayY}px, 0) scale(${scale})`;
+          `translate3d(${travel}px, ${swayY}px, 0) scale(${scale})`;
       }
 
       // parallax water layers at different speeds
-      const speeds = [420, 900, 1500];
+      const speeds = [600, 1200, 2000];
       waterRefs.forEach((ref, i) => {
         if (ref.current) ref.current.style.transform = `translate3d(${-p * speeds[i]}px, 0, 0)`;
       });

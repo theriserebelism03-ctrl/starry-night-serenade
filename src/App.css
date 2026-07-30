@@ -452,7 +452,7 @@
 }
 
 /* ---------- Scene 4: boat journey ---------- */
-.bd-journey { position: relative; height: 380vh; z-index: 2; }
+.bd-journey { position: relative; height: 600vh; z-index: 2; }
 .bd-journey-sticky {
   position: sticky;
   top: 0;
