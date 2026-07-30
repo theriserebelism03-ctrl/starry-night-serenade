@@ -1,5 +1,6 @@
 import { useState } from "react";
-import kittyAsset from "@/assets/kitty.png.asset.json";
+import kittyAsset from "@/assets/kitty-cut.png.asset.json";
+import catAsset from "@/assets/cat-cut.png.asset.json";
 
 /** Scene 5 — kitty walks in with a bouquet; click to read the letter. */
 export default function KittyScene() {
@@ -10,10 +11,18 @@ export default function KittyScene() {
       <h2 className="bd-title">Someone Has Something For You</h2>
       <p className="bd-sub">tap her to open the letter</p>
 
-      <div className="bd-walker" onClick={() => setOpen(true)} role="button" tabIndex={0}
-           onKeyDown={(e) => e.key === "Enter" && setOpen(true)}>
-        <div className="bd-walker-bounce">
-          <img src={kittyAsset.url} alt="Hello Kitty holding a bouquet" style={{ width: "100%", display: "block" }} />
+      <div className="bd-walker-pair">
+        <div className="bd-walker" onClick={() => setOpen(true)} role="button" tabIndex={0}
+             onKeyDown={(e) => e.key === "Enter" && setOpen(true)}>
+          <div className="bd-walker-bounce">
+            <img className="bd-sprite" src={kittyAsset.url} alt="Hello Kitty holding a bouquet" />
+          </div>
+        </div>
+        <div className="bd-walker from-right" onClick={() => setOpen(true)} role="button" tabIndex={0}
+             onKeyDown={(e) => e.key === "Enter" && setOpen(true)}>
+          <div className="bd-walker-bounce" style={{ animationDelay: "0.35s" }}>
+            <img className="bd-sprite" src={catAsset.url} alt="Pixel cat holding a rose" />
+          </div>
         </div>
       </div>
       <button type="button" className="bd-btn" style={{ marginTop: "1.2rem" }} onClick={() => setOpen(true)}>
