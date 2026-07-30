@@ -558,11 +558,6 @@
   width: 100%;
   display: block;
   background: transparent;
-  mix-blend-mode: multiply;
-  filter: none;
-}
-@supports (mix-blend-mode: multiply) {
-  .bd-sprite { mix-blend-mode: normal; }
 }
 @keyframes bd-walk-in {
   0% { transform: translateX(-120vw) rotate(-6deg); }
