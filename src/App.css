@@ -547,6 +547,23 @@
 .bd-walker.from-right { animation-name: bd-walk-in-right; }
 .bd-walker:hover { transform: scale(1.05); filter: drop-shadow(0 0 30px rgba(232, 201, 122, 0.5)); }
 .bd-walker-bounce { animation: bd-bounce 1.4s ease-in-out infinite; }
+.bd-walker-pair {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: clamp(0.5rem, 4vw, 3rem);
+  flex-wrap: nowrap;
+}
+.bd-sprite {
+  width: 100%;
+  display: block;
+  background: transparent;
+  mix-blend-mode: multiply;
+  filter: none;
+}
+@supports (mix-blend-mode: multiply) {
+  .bd-sprite { mix-blend-mode: normal; }
+}
 @keyframes bd-walk-in {
   0% { transform: translateX(-120vw) rotate(-6deg); }
   100% { transform: translateX(0) rotate(0); }
