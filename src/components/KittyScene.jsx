@@ -1,4 +1,5 @@
 import { useState } from "react";
+import kittyAsset from "@/assets/kitty.png.asset.json";
 
 /** Scene 5 — kitty walks in with a bouquet; click to read the letter. */
 export default function KittyScene() {
@@ -12,10 +13,12 @@ export default function KittyScene() {
       <div className="bd-walker" onClick={() => setOpen(true)} role="button" tabIndex={0}
            onKeyDown={(e) => e.key === "Enter" && setOpen(true)}>
         <div className="bd-walker-bounce">
-          <img src="/kitty.png" alt="Kitty holding a bouquet" style={{ width: "100%", display: "block" }} />
+          <img src={kittyAsset.url} alt="Hello Kitty holding a bouquet" style={{ width: "100%", display: "block" }} />
         </div>
       </div>
-      <p className="bd-tap">click me</p>
+      <button type="button" className="bd-btn" style={{ marginTop: "1.2rem" }} onClick={() => setOpen(true)}>
+        Click me
+      </button>
 
       {open && (
         <div className="bd-overlay" onClick={() => setOpen(false)}>
