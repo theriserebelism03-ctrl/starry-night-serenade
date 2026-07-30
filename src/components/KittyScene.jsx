@@ -1,5 +1,5 @@
 import { useState } from "react";
-import kittyAsset from "@/assets/kitty-cut.png.asset.json";
+import kittyAsset from "@/assets/kitty-orig-cut.png.asset.json";
 import catAsset from "@/assets/cat-cut.png.asset.json";
 
 /** Scene 5 — kitty walks in with a bouquet; click to read the letter. */
