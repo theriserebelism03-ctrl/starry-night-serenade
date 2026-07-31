@@ -549,10 +549,10 @@
 .bd-walker-bounce { animation: bd-bounce 1.4s ease-in-out infinite; }
 .bd-walker-pair {
   display: flex;
-  align-items: flex-start;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
-  gap: clamp(0.5rem, 4vw, 3rem);
-  flex-wrap: nowrap;
+  gap: clamp(1.5rem, 5vh, 3rem);
 }
 .bd-walker-col {
   display: flex;
