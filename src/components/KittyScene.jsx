@@ -1,10 +1,16 @@
 import { useState } from "react";
 import kittyAsset from "@/assets/kitty-orig-cut.png.asset.json";
-import catAsset from "@/assets/cat-cut.png.asset.json";
+import catAsset from "@/assets/cat-rose-cut.png.asset.json";
 
 /** Scene 5 — kitty walks in with a bouquet; click to read the letter. */
 export default function KittyScene() {
   const [open, setOpen] = useState(false);
+  const [kittyGone, setKittyGone] = useState(false);
+
+  const openFromKitty = () => {
+    setKittyGone(true);
+    setOpen(true);
+  };
 
   return (
     <section className="bd-scene">
@@ -12,22 +18,31 @@ export default function KittyScene() {
       <p className="bd-sub">tap her to open the letter</p>
 
       <div className="bd-walker-pair">
-        <div className="bd-walker" onClick={() => setOpen(true)} role="button" tabIndex={0}
-             onKeyDown={(e) => e.key === "Enter" && setOpen(true)}>
-          <div className="bd-walker-bounce">
-            <img className="bd-sprite" src={kittyAsset.url} alt="Hello Kitty holding a bouquet" />
+        {!kittyGone && (
+          <div className="bd-walker-col">
+            <div className="bd-walker" onClick={openFromKitty} role="button" tabIndex={0}
+                 onKeyDown={(e) => e.key === "Enter" && openFromKitty()}>
+              <div className="bd-walker-bounce">
+                <img className="bd-sprite" src={kittyAsset.url} alt="Hello Kitty holding a bouquet" />
+              </div>
+            </div>
+            <button type="button" className="bd-btn" onClick={openFromKitty}>
+              Click me
+            </button>
           </div>
-        </div>
-        <div className="bd-walker from-right" onClick={() => setOpen(true)} role="button" tabIndex={0}
-             onKeyDown={(e) => e.key === "Enter" && setOpen(true)}>
-          <div className="bd-walker-bounce" style={{ animationDelay: "0.35s" }}>
-            <img className="bd-sprite" src={catAsset.url} alt="Pixel cat holding a rose" />
+        )}
+        <div className="bd-walker-col">
+          <div className="bd-walker from-right" onClick={() => setOpen(true)} role="button" tabIndex={0}
+               onKeyDown={(e) => e.key === "Enter" && setOpen(true)}>
+            <div className="bd-walker-bounce" style={{ animationDelay: "0.35s" }}>
+              <img className="bd-sprite" src={catAsset.url} alt="Pixel cat holding a rose" />
+            </div>
           </div>
+          <button type="button" className="bd-btn" onClick={() => setOpen(true)}>
+            Click me
+          </button>
         </div>
       </div>
-      <button type="button" className="bd-btn" style={{ marginTop: "1.2rem" }} onClick={() => setOpen(true)}>
-        Click me
-      </button>
 
       {open && (
         <div className="bd-overlay" onClick={() => setOpen(false)}>

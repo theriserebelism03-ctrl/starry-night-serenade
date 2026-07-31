@@ -549,10 +549,16 @@
 .bd-walker-bounce { animation: bd-bounce 1.4s ease-in-out infinite; }
 .bd-walker-pair {
   display: flex;
-  align-items: flex-end;
+  align-items: flex-start;
   justify-content: center;
   gap: clamp(0.5rem, 4vw, 3rem);
   flex-wrap: nowrap;
+}
+.bd-walker-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
 }
 .bd-sprite {
   width: 100%;
