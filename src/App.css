@@ -663,6 +663,7 @@
   text-transform: none;
 }
 .bd-gift-row {
+  padding-top: clamp(90px, 18vh, 200px);
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
