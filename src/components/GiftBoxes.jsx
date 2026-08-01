@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import lid1 from "@/assets/gift1-lid.png.asset.json";
 import base1 from "@/assets/gift1-base.png.asset.json";
 import lid2 from "@/assets/gift2-lid.png.asset.json";
@@ -62,7 +63,7 @@ export default function GiftBoxes() {
       </div>
       <p className="bd-sub" style={{ marginTop: "2rem" }}>tap a box to open it</p>
 
-      {modalOpen && (
+      {modalOpen && typeof document !== "undefined" && createPortal(
         <div
           className="bd-overlay"
           role="dialog"
@@ -84,7 +85,8 @@ export default function GiftBoxes() {
               Close Box
             </button>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </section>
   );
