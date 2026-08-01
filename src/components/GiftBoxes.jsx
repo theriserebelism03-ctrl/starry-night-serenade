@@ -39,34 +39,37 @@ export default function GiftBoxes() {
           >
             <div className="bd-gift-inner" />
 
-            {g.id === 1 && (
-              <div className="bd-gift-reveal">
-                <img className="bd-gift-comic" src={veilComic.url} alt="Veil comic cover" />
-                <a
-                  className="bd-gift-link"
-                  href="https://comix.to/title/k7lny-veil"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  Read / View Veil Comic
-                </a>
-                <button
-                  className="bd-gift-close"
-                  onClick={(e) => { e.stopPropagation(); close(g.id); }}
-                  aria-label="Close box"
-                >
-                  Close Box
-                </button>
-              </div>
-            )}
-
             <img className="bd-gift-base" src={g.base} alt="" />
             <img className="bd-gift-lid" src={g.lid} alt="" />
           </div>
         ))}
       </div>
       <p className="bd-sub" style={{ marginTop: "2rem" }}>tap a box to open it</p>
+
+      {open[1] && (
+        <div
+          className="bd-overlay"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Veil comic"
+          onClick={() => close(1)}
+        >
+          <div className="bd-glass bd-veil-modal" onClick={(e) => e.stopPropagation()}>
+            <img className="bd-veil-cover" src={veilComic.url} alt="Veil comic cover" />
+            <a
+              className="bd-btn bd-veil-cta"
+              href="https://comix.to/title/k7lny-veil"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Read / View Veil Comic
+            </a>
+            <button className="bd-gift-close" onClick={() => close(1)} aria-label="Close box">
+              Close Box
+            </button>
+          </div>
+        </div>
+      )}
     </section>
   );
 }
