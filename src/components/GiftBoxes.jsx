@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import lid1 from "@/assets/gift1-lid.png.asset.json";
 import base1 from "@/assets/gift1-base.png.asset.json";
 import lid2 from "@/assets/gift2-lid.png.asset.json";
@@ -19,6 +19,22 @@ export default function GiftBoxes() {
 
   const toggle = (id) => setOpen((o) => ({ ...o, [id]: !o[id] }));
   const close = (id) => setOpen((o) => ({ ...o, [id]: false }));
+
+  const modalOpen = Boolean(open[1]);
+
+  useEffect(() => {
+    if (!modalOpen) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const onKey = (e) => {
+      if (e.key === "Escape") close(1);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = prev;
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [modalOpen]);
 
   return (
     <section className="bd-scene bd-gifts-scene">
@@ -46,7 +62,7 @@ export default function GiftBoxes() {
       </div>
       <p className="bd-sub" style={{ marginTop: "2rem" }}>tap a box to open it</p>
 
-      {open[1] && (
+      {modalOpen && (
         <div
           className="bd-overlay"
           role="dialog"
