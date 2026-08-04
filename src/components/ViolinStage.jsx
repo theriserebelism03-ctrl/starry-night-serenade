@@ -201,24 +201,16 @@ export default function ViolinStage({ onExit }) {
   };
 
   return (
-    <div className="bd-violin-page" onMouseMove={onStageMove} onMouseLeave={() => setBow((b) => ({ ...b, on: false }))}>
+    <div className="bd-violin-page">
       <button type="button" className="bd-btn bd-violin-exit" onClick={onExit}>
         ← Exit
       </button>
 
       <h2 className="bd-title bd-violin-title">Play the Violin</h2>
-      <p className="bd-sub">hold A · S · D · F to bow the strings</p>
+      <p className="bd-sub">hold G H J K L · Q W E R T Y U I O P · Z X C V B N M to bow the strings</p>
 
       <div className="bd-violin-stage">
         <img className={`bd-violin-img${Object.values(active).some(Boolean) ? " bowing" : ""}`} src={violinImg.url} alt="Violin" />
-        <div
-          className={`bd-bow${bow.on ? " on" : ""}`}
-          style={{ left: `${bow.x}%`, top: `${bow.y}%` }}
-          aria-hidden="true"
-        >
-          <span className="bd-bow-stick" />
-          <span className="bd-bow-hair" />
-        </div>
       </div>
 
       <div className="bd-violin-keys">
@@ -244,6 +236,7 @@ export default function ViolinStage({ onExit }) {
           {recording && <span className="bd-rec-dot" />}
           {recording ? "Stop Recording" : "Start Recording"}
         </button>
+        {recording && <span className="bd-rec-time">{fmtTime(elapsed)}</span>}
         <button type="button" className="bd-btn" onClick={playRecording} disabled={!recordingUrl || recording}>
           Play Recording
         </button>
