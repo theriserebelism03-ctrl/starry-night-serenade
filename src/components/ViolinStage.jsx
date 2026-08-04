@@ -3,11 +3,32 @@ import violinImg from "@/assets/violin.png.asset.json";
 
 /** key -> { note label, frequency } */
 const KEYS = {
-  a: { note: "A", freq: 440.0 },
-  s: { note: "B", freq: 493.88 },
-  d: { note: "C", freq: 523.25 },
-  f: { note: "D", freq: 587.33 },
+  g: { note: "E4", freq: 329.63 },
+  h: { note: "F4", freq: 349.23 },
+  j: { note: "G4", freq: 392.0 },
+  k: { note: "A4", freq: 440.0 },
+  l: { note: "B4", freq: 493.88 },
+  q: { note: "C5", freq: 523.25 },
+  w: { note: "D5", freq: 587.33 },
+  e: { note: "E5", freq: 659.25 },
+  r: { note: "F5", freq: 698.46 },
+  t: { note: "G5", freq: 783.99 },
+  y: { note: "A5", freq: 880.0 },
+  u: { note: "B5", freq: 987.77 },
+  i: { note: "C6", freq: 1046.5 },
+  o: { note: "D6", freq: 1174.66 },
+  p: { note: "E6", freq: 1318.51 },
+  z: { note: "F6", freq: 1396.91 },
+  x: { note: "G6", freq: 1567.98 },
+  c: { note: "A6", freq: 1760.0 },
+  v: { note: "B6", freq: 1975.53 },
+  b: { note: "C7", freq: 2093.0 },
+  n: { note: "D7", freq: 2349.32 },
+  m: { note: "E7", freq: 2637.02 },
 };
+
+const fmtTime = (s) =>
+  `${String(Math.floor(s / 60)).padStart(2, "0")}:${String(s % 60).padStart(2, "0")}`;
 
 /** Dedicated violin instrument screen. Sound only plays while a key is held. */
 export default function ViolinStage({ onExit }) {
@@ -22,7 +43,14 @@ export default function ViolinStage({ onExit }) {
   const [active, setActive] = useState({});
   const [recording, setRecording] = useState(false);
   const [recordingUrl, setRecordingUrl] = useState(null);
-  const [bow, setBow] = useState({ x: 50, y: 55, on: false });
+  const [elapsed, setElapsed] = useState(0);
+
+  useEffect(() => {
+    if (!recording) return;
+    setElapsed(0);
+    const id = window.setInterval(() => setElapsed((s) => s + 1), 1000);
+    return () => window.clearInterval(id);
+  }, [recording]);
 
   const getCtx = useCallback(() => {
     if (!ctxRef.current) {
@@ -140,15 +168,6 @@ export default function ViolinStage({ onExit }) {
     [],
   );
 
-  const onStageMove = (e) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    setBow({
-      x: ((e.clientX - rect.left) / rect.width) * 100,
-      y: ((e.clientY - rect.top) / rect.height) * 100,
-      on: true,
-    });
-  };
-
   const toggleRecording = () => {
     if (recording) {
       recorderRef.current && recorderRef.current.stop();
@@ -182,24 +201,16 @@ export default function ViolinStage({ onExit }) {
   };
 
   return (
-    <div className="bd-violin-page" onMouseMove={onStageMove} onMouseLeave={() => setBow((b) => ({ ...b, on: false }))}>
+    <div className="bd-violin-page">
       <button type="button" className="bd-btn bd-violin-exit" onClick={onExit}>
         ← Exit
       </button>
 
       <h2 className="bd-title bd-violin-title">Play the Violin</h2>
-      <p className="bd-sub">hold A · S · D · F to bow the strings</p>
+      <p className="bd-sub">hold G H J K L · Q W E R T Y U I O P · Z X C V B N M to bow the strings</p>
 
       <div className="bd-violin-stage">
         <img className={`bd-violin-img${Object.values(active).some(Boolean) ? " bowing" : ""}`} src={violinImg.url} alt="Violin" />
-        <div
-          className={`bd-bow${bow.on ? " on" : ""}`}
-          style={{ left: `${bow.x}%`, top: `${bow.y}%` }}
-          aria-hidden="true"
-        >
-          <span className="bd-bow-stick" />
-          <span className="bd-bow-hair" />
-        </div>
       </div>
 
       <div className="bd-violin-keys">
@@ -225,6 +236,7 @@ export default function ViolinStage({ onExit }) {
           {recording && <span className="bd-rec-dot" />}
           {recording ? "Stop Recording" : "Start Recording"}
         </button>
+        {recording && <span className="bd-rec-time">{fmtTime(elapsed)}</span>}
         <button type="button" className="bd-btn" onClick={playRecording} disabled={!recordingUrl || recording}>
           Play Recording
         </button>
