@@ -7,6 +7,7 @@ import base2 from "@/assets/gift2-base.png.asset.json";
 import lid3 from "@/assets/gift3-lid.png.asset.json";
 import base3 from "@/assets/gift3-base.png.asset.json";
 import veilComic from "@/assets/veil-comic.jpg.asset.json";
+import ViolinStage from "./ViolinStage.jsx";
 
 const GIFTS = [
   { id: 1, lid: lid1.url, base: base1.url },
@@ -17,6 +18,7 @@ const GIFTS = [
 /** Scene 6 — three gift boxes that open and close on tap. */
 export default function GiftBoxes() {
   const [open, setOpen] = useState({});
+  const [violin, setViolin] = useState(false);
 
   const toggle = (id) => setOpen((o) => ({ ...o, [id]: !o[id] }));
   const close = (id) => setOpen((o) => ({ ...o, [id]: false }));
@@ -24,18 +26,18 @@ export default function GiftBoxes() {
   const modalOpen = Boolean(open[1]);
 
   useEffect(() => {
-    if (!modalOpen) return;
+    if (!modalOpen && !violin) return;
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     const onKey = (e) => {
-      if (e.key === "Escape") close(1);
+      if (e.key === "Escape" && modalOpen) close(1);
     };
     window.addEventListener("keydown", onKey);
     return () => {
       document.body.style.overflow = prev;
       window.removeEventListener("keydown", onKey);
     };
-  }, [modalOpen]);
+  }, [modalOpen, violin]);
 
   return (
     <section className="bd-scene bd-gifts-scene">
@@ -62,6 +64,20 @@ export default function GiftBoxes() {
         ))}
       </div>
       <p className="bd-sub" style={{ marginTop: "2rem" }}>tap a box to open it</p>
+
+      {open[2] && (
+        <button
+          type="button"
+          className="bd-btn bd-fade-in"
+          style={{ marginTop: "1.4rem" }}
+          onClick={() => setViolin(true)}
+        >
+          🎻 Play Violin
+        </button>
+      )}
+
+      {violin && typeof document !== "undefined" &&
+        createPortal(<ViolinStage onExit={() => setViolin(false)} />, document.body)}
 
       {modalOpen && typeof document !== "undefined" && createPortal(
         <div
