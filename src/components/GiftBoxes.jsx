@@ -16,9 +16,29 @@ const GIFTS = [
 ];
 
 /** Scene 6 — three gift boxes that open and close on tap. */
-export default function GiftBoxes() {
+export default function GiftBoxes({ audioRef }) {
   const [open, setOpen] = useState({});
   const [violin, setViolin] = useState(false);
+  const wasPlayingRef = useState({ current: false })[0];
+
+  const openViolin = () => {
+    const audio = audioRef && audioRef.current;
+    if (audio && !audio.paused) {
+      wasPlayingRef.current = true;
+      audio.pause();
+    }
+    setViolin(true);
+  };
+
+  const exitViolin = () => {
+    setViolin(false);
+    const audio = audioRef && audioRef.current;
+    if (audio && wasPlayingRef.current) {
+      wasPlayingRef.current = false;
+      const p = audio.play();
+      if (p && p.catch) p.catch(() => {});
+    }
+  };
 
   const toggle = (id) => setOpen((o) => ({ ...o, [id]: !o[id] }));
   const close = (id) => setOpen((o) => ({ ...o, [id]: false }));
@@ -70,14 +90,14 @@ export default function GiftBoxes() {
           type="button"
           className="bd-btn bd-fade-in"
           style={{ marginTop: "1.4rem" }}
-          onClick={() => setViolin(true)}
+          onClick={openViolin}
         >
           🎻 Play Violin
         </button>
       )}
 
       {violin && typeof document !== "undefined" &&
-        createPortal(<ViolinStage onExit={() => setViolin(false)} />, document.body)}
+        createPortal(<ViolinStage onExit={exitViolin} />, document.body)}
 
       {modalOpen && typeof document !== "undefined" && createPortal(
         <div
