@@ -66,7 +66,7 @@ export default function App() {
           <MemoryGallery />
           <BoatJourney />
           <KittyScene />
-          <GiftBoxes />
+          <GiftBoxes audioRef={audioRef} />
           <FinalScene onExit={handleExit} />
         </>
       )}
