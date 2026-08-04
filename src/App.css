@@ -765,3 +765,123 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
+
+/* ---------- Violin instrument screen ---------- */
+.bd-violin-page {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 4.5rem 1.2rem 8rem;
+  background: radial-gradient(circle at 50% 20%, #12203c 0%, #060b16 60%, #000 100%);
+  animation: bd-fade 0.5s ease both;
+}
+.bd-violin-exit {
+  position: fixed;
+  top: 1.1rem;
+  left: 1.1rem;
+  z-index: 2;
+}
+.bd-violin-title { margin-bottom: 0.2rem; }
+.bd-violin-stage {
+  position: relative;
+  width: min(760px, 94vw);
+  margin: 1.6rem 0 1.2rem;
+  aspect-ratio: 16 / 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.bd-violin-img {
+  width: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 24px 44px rgba(0, 0, 0, 0.6));
+  transition: transform 0.25s ease, filter 0.25s ease;
+}
+.bd-violin-img.bowing {
+  filter: drop-shadow(0 0 26px rgba(232, 201, 122, 0.45)) drop-shadow(0 24px 44px rgba(0, 0, 0, 0.6));
+  transform: scale(1.012);
+}
+.bd-bow {
+  position: absolute;
+  width: 46%;
+  height: 10px;
+  transform: translate(-50%, -50%) rotate(-14deg);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+.bd-bow.on { opacity: 1; }
+.bd-bow-stick,
+.bd-bow-hair {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  border-radius: 999px;
+}
+.bd-bow-stick {
+  top: 0;
+  height: 5px;
+  background: linear-gradient(90deg, #3d2115, #7b4526 20%, #a2643a 60%, #3d2115);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
+}
+.bd-bow-hair {
+  top: 7px;
+  height: 2px;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.2), #f4ecd8 30%, #fffaf0 70%, rgba(255, 255, 255, 0.2));
+}
+.bd-violin-keys {
+  display: flex;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.bd-violin-key {
+  cursor: pointer;
+  min-width: 78px;
+  padding: 0.9rem 0.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  align-items: center;
+  border-radius: 14px;
+  color: var(--gold);
+  border: 1px solid var(--gold);
+  background: rgba(232, 201, 122, 0.08);
+  transition: transform 0.12s ease, background 0.12s ease, box-shadow 0.12s ease;
+}
+.bd-violin-key span { font-size: 0.7rem; letter-spacing: 0.2em; opacity: 0.8; }
+.bd-violin-key.on {
+  transform: translateY(3px);
+  background: rgba(232, 201, 122, 0.28);
+  box-shadow: 0 0 22px rgba(232, 201, 122, 0.45);
+}
+.bd-rec-bar {
+  position: fixed;
+  left: 50%;
+  bottom: 1.2rem;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 0.8rem 1rem;
+  z-index: 2;
+}
+.bd-rec-btn { display: inline-flex; align-items: center; gap: 0.5rem; }
+.bd-rec-btn.rec { border-color: #ff6b6b; color: #ff8f8f; }
+.bd-rec-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #ff4d4d;
+  animation: bd-rec-pulse 1s ease-in-out infinite;
+}
+.bd-rec-bar .bd-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+@keyframes bd-rec-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.25; }
+}
