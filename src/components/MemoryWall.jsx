@@ -13,20 +13,44 @@ import photo10 from "@/assets/photo10.png.asset.json";
 
 const PHOTOS = [photo1, photo2, photo3, photo4, photo5, photo6, photo7, photo8, photo9, photo10];
 
-/** Deterministic scatter across X / Y / Z space. */
+const RADIUS = 420;
+
+/** Deterministic pseudo-random scatter over the surface of a sphere. */
 const CARDS = PHOTOS.map((p, i) => {
-  const col = i % 4;
-  const row = Math.floor(i / 4);
+  const n = PHOTOS.length;
+  const yy = 1 - ((i + 0.5) / n) * 2;
+  const jitter = (((i * 137) % 100) / 100 - 0.5) * 0.18;
+  const lat = Math.asin(Math.max(-1, Math.min(1, yy + jitter)));
+  const lon = (i * 2.399963 + ((i * 71) % 100) / 100) % (Math.PI * 2);
   return {
     url: p.url,
-    x: (col - 1.5) * 300 + ((i * 53) % 90) - 45,
-    y: (row - 1) * 280 + ((i * 37) % 70) - 35,
-    z: -600 + ((i * 173) % 900),
-    rot: ((i * 29) % 14) - 7,
+    name: p.original_filename || `memory-${i + 1}.png`,
+    lat: (lat * 180) / Math.PI,
+    lon: (lon * 180) / Math.PI,
   };
 });
 
+const RINGS = [-60, -30, 0, 30, 60];
+const MERIDIANS = [0, 30, 60, 90, 120, 150];
+
 const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+
+async function downloadImage(url, name) {
+  try {
+    const res = await fetch(url);
+    const blob = await res.blob();
+    const href = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = href;
+    a.download = name;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(href), 4000);
+  } catch {
+    window.open(url, "_blank", "noopener");
+  }
+}
 
 /** Constellation net canvas that reacts to the pointer. */
 function NetBackground() {
