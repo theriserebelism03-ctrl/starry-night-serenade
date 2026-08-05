@@ -872,7 +872,7 @@
   inset: 0;
   z-index: 9999;
   overflow: hidden;
-  background: radial-gradient(circle at 50% 30%, #0d1a30 0%, #050a14 55%, #000 100%);
+  background: #000;
   animation: bd-fade 0.5s ease both;
 }
 .bd-net-canvas { position: absolute; inset: 0; z-index: 0; }
@@ -906,6 +906,15 @@
   transform-style: preserve-3d;
   transition: transform 0.08s linear;
 }
+.bd-wall-ring {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 50%;
+  pointer-events: none;
+  transform-style: preserve-3d;
+}
 .bd-wall-card {
   position: absolute;
   margin: 0;
@@ -918,6 +927,7 @@
   box-shadow: 0 22px 60px rgba(0, 0, 0, 0.6);
   transform-style: preserve-3d;
   transition: box-shadow 0.35s ease, filter 0.35s ease;
+  cursor: pointer;
   animation: bd-wall-float 7s ease-in-out infinite alternate;
 }
 .bd-wall-card img {
