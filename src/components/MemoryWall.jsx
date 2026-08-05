@@ -114,7 +114,7 @@ function NetBackground() {
           const d2 = dx * dx + dy * dy;
           if (d2 < 20000) {
             const a = 1 - d2 / 20000;
-            ctx.strokeStyle = `rgba(232, 201, 122, ${a * 0.28})`;
+            ctx.strokeStyle = `rgba(255, 255, 255, ${a * 0.18})`;
             ctx.lineWidth = 0.6;
             ctx.beginPath();
             ctx.moveTo(pts[i].x, pts[i].y);
@@ -122,7 +122,7 @@ function NetBackground() {
             ctx.stroke();
           }
         }
-        ctx.fillStyle = "rgba(255,255,255,0.55)";
+        ctx.fillStyle = "rgba(255,255,255,0.4)";
         ctx.beginPath();
         ctx.arc(pts[i].x, pts[i].y, 1.3, 0, Math.PI * 2);
         ctx.fill();
@@ -147,11 +147,11 @@ function NetBackground() {
   return <canvas ref={canvasRef} className="bd-net-canvas" aria-hidden="true" />;
 }
 
-/** Full-screen 3D spatial photo gallery: drag to pan/orbit, wheel to zoom. */
+/** Full-screen 3D sphere gallery: drag to rotate, ESC to exit, click a card to download. */
 export default function MemoryWall({ onExit }) {
   const stageRef = useRef(null);
   const dragRef = useRef(null);
-  const viewRef = useRef({ x: 0, y: 0, zoom: 1, rx: 0, ry: 0 });
+  const viewRef = useRef({ rx: -8, ry: 0 });
   const [view, setView] = useState(viewRef.current);
   const [dragging, setDragging] = useState(false);
 
@@ -168,19 +168,14 @@ export default function MemoryWall({ onExit }) {
     return () => window.removeEventListener("keydown", onKey);
   }, [onExit]);
 
-  // non-passive wheel zoom
+  // block any scroll/zoom gestures over the stage
   useEffect(() => {
     const el = stageRef.current;
     if (!el) return;
-    const onWheel = (e) => {
-      e.preventDefault();
-      const dy = e.deltaY * (e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? 100 : 1);
-      const v = viewRef.current;
-      setBoth({ ...v, zoom: clamp(v.zoom * Math.exp(-dy * 0.0015), 0.4, 2.6) });
-    };
+    const onWheel = (e) => e.preventDefault();
     el.addEventListener("wheel", onWheel, { passive: false });
     return () => el.removeEventListener("wheel", onWheel);
-  }, [setBoth]);
+  }, []);
 
   const onPointerDown = (e) => {
     dragRef.current = {
@@ -188,7 +183,7 @@ export default function MemoryWall({ onExit }) {
       sx: e.clientX,
       sy: e.clientY,
       view: viewRef.current,
-      orbit: e.shiftKey || e.button === 2,
+      moved: false,
     };
     e.currentTarget.setPointerCapture(e.pointerId);
     setDragging(true);
@@ -199,18 +194,16 @@ export default function MemoryWall({ onExit }) {
     if (!d || d.id !== e.pointerId) return;
     const dx = e.clientX - d.sx;
     const dy = e.clientY - d.sy;
-    if (d.orbit) {
-      setBoth({
-        ...d.view,
-        ry: clamp(d.view.ry + dx * 0.12, -35, 35),
-        rx: clamp(d.view.rx - dy * 0.12, -25, 25),
-      });
-    } else {
-      setBoth({ ...d.view, x: d.view.x + dx, y: d.view.y + dy });
-    }
+    if (Math.abs(dx) > 4 || Math.abs(dy) > 4) d.moved = true;
+    setBoth({
+      ry: d.view.ry + dx * 0.25,
+      rx: clamp(d.view.rx - dy * 0.25, -80, 80),
+    });
   };
 
   const endDrag = () => {
+    const d = dragRef.current;
+    if (d) d.ended = true;
     dragRef.current = null;
     setDragging(false);
   };
@@ -218,15 +211,6 @@ export default function MemoryWall({ onExit }) {
   return (
     <div className="bd-wall-page">
       <NetBackground />
-
-      <button type="button" className="bd-btn bd-wall-exit" onClick={onExit}>
-        ← Exit
-      </button>
-
-      <div className="bd-wall-head">
-        <h2 className="bd-title bd-wall-title">Memory Wall</h2>
-        <p className="bd-sub">drag to pan · shift + drag to orbit · scroll to zoom</p>
-      </div>
 
       <div
         ref={stageRef}
@@ -239,17 +223,51 @@ export default function MemoryWall({ onExit }) {
         <div
           className="bd-wall-space"
           style={{
-            transform: `translate3d(${view.x}px, ${view.y}px, 0) scale(${view.zoom}) rotateX(${view.rx}deg) rotateY(${view.ry}deg)`,
+            transform: `rotateX(${view.rx}deg) rotateY(${view.ry}deg)`,
           }}
         >
+          {RINGS.map((lat) => (
+            <div
+              key={`r${lat}`}
+              className="bd-wall-ring"
+              style={{
+                width: `${2 * RADIUS * Math.cos((lat * Math.PI) / 180)}px`,
+                height: `${2 * RADIUS * Math.cos((lat * Math.PI) / 180)}px`,
+                marginLeft: `${-RADIUS * Math.cos((lat * Math.PI) / 180)}px`,
+                marginTop: `${-RADIUS * Math.cos((lat * Math.PI) / 180)}px`,
+                transform: `translateY(${-RADIUS * Math.sin((lat * Math.PI) / 180)}px) rotateX(90deg)`,
+              }}
+            />
+          ))}
+          {MERIDIANS.map((lon) => (
+            <div
+              key={`m${lon}`}
+              className="bd-wall-ring"
+              style={{
+                width: `${2 * RADIUS}px`,
+                height: `${2 * RADIUS}px`,
+                marginLeft: `${-RADIUS}px`,
+                marginTop: `${-RADIUS}px`,
+                transform: `rotateY(${lon}deg)`,
+              }}
+            />
+          ))}
+
           {CARDS.map((c, i) => (
             <figure
               key={c.url}
               className="bd-wall-card"
+              role="button"
+              tabIndex={0}
+              title="Click to download"
               style={{
-                transform: `translate3d(${c.x}px, ${c.y}px, ${c.z}px) rotate(${c.rot}deg)`,
+                transform: `rotateY(${c.lon}deg) rotateX(${-c.lat}deg) translateZ(${RADIUS}px)`,
                 animationDelay: `${i * 0.35}s`,
               }}
+              onClick={() => downloadImage(c.url, c.name)}
+              onKeyDown={(e) =>
+                (e.key === "Enter" || e.key === " ") && downloadImage(c.url, c.name)
+              }
             >
               <div className="bd-wall-card-inner">
                 <img src={c.url} alt="" draggable="false" loading="lazy" />
@@ -257,16 +275,6 @@ export default function MemoryWall({ onExit }) {
             </figure>
           ))}
         </div>
-      </div>
-
-      <div className="bd-wall-hint bd-glass">
-        <button
-          type="button"
-          className="bd-btn"
-          onClick={() => setBoth({ x: 0, y: 0, zoom: 1, rx: 0, ry: 0 })}
-        >
-          Reset View
-        </button>
       </div>
     </div>
   );
