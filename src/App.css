@@ -865,3 +865,93 @@
   0%, 100% { opacity: 1; }
   50% { opacity: 0.25; }
 }
+
+/* ── Scene 6b · 3D Memory Wall ─────────────────────────────── */
+.bd-wall-page {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  overflow: hidden;
+  background: radial-gradient(circle at 50% 30%, #0d1a30 0%, #050a14 55%, #000 100%);
+  animation: bd-fade 0.5s ease both;
+}
+.bd-net-canvas { position: absolute; inset: 0; z-index: 0; }
+.bd-wall-exit { position: fixed; top: 1.1rem; left: 1.1rem; z-index: 4; }
+.bd-wall-head {
+  position: absolute;
+  top: 1.2rem;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  text-align: center;
+  pointer-events: none;
+}
+.bd-wall-title { margin: 0 0 0.2rem; }
+.bd-wall-stage {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  perspective: 1100px;
+  perspective-origin: 50% 50%;
+  cursor: grab;
+  touch-action: none;
+}
+.bd-wall-stage.dragging { cursor: grabbing; }
+.bd-wall-space {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  transform-style: preserve-3d;
+  transition: transform 0.08s linear;
+}
+.bd-wall-card {
+  position: absolute;
+  margin: 0;
+  width: 210px;
+  margin-left: -105px;
+  margin-top: -78px;
+  padding: 10px 10px 34px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 22px 60px rgba(0, 0, 0, 0.6);
+  transform-style: preserve-3d;
+  transition: box-shadow 0.35s ease, filter 0.35s ease;
+  animation: bd-wall-float 7s ease-in-out infinite alternate;
+}
+.bd-wall-card img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 4px;
+  user-select: none;
+}
+.bd-wall-card:hover {
+  z-index: 5;
+  filter: brightness(1.12);
+  box-shadow: 0 0 34px rgba(232, 201, 122, 0.6), 0 30px 70px rgba(0, 0, 0, 0.7);
+}
+.bd-wall-card-inner {
+  transform-style: preserve-3d;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.bd-wall-card:hover .bd-wall-card-inner {
+  transform: perspective(700px) rotateX(8deg) rotateY(-10deg) scale(1.12) translateZ(40px);
+}
+@keyframes bd-wall-float {
+  from { filter: brightness(0.94); }
+  to { filter: brightness(1.04); }
+}
+.bd-wall-hint {
+  position: fixed;
+  left: 50%;
+  bottom: 1.2rem;
+  transform: translateX(-50%);
+  z-index: 4;
+  padding: 0.6rem 0.9rem;
+}
+@media (max-width: 640px) {
+  .bd-wall-card { width: 150px; margin-left: -75px; }
+}
