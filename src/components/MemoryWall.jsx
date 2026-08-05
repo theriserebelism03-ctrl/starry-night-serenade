@@ -227,7 +227,9 @@ export default function MemoryWall({ onExit }) {
                 animationDelay: `${i * 0.35}s`,
               }}
             >
-              <img src={c.url} alt="" draggable="false" loading="lazy" />
+              <div className="bd-wall-card-inner">
+                <img src={c.url} alt="" draggable="false" loading="lazy" />
+              </div>
             </figure>
           ))}
         </div>

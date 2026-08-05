@@ -933,7 +933,13 @@
   filter: brightness(1.12);
   box-shadow: 0 0 34px rgba(232, 201, 122, 0.6), 0 30px 70px rgba(0, 0, 0, 0.7);
 }
-.bd-wall-card:hover img { transform: none; }
+.bd-wall-card-inner {
+  transform-style: preserve-3d;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.bd-wall-card:hover .bd-wall-card-inner {
+  transform: perspective(700px) rotateX(8deg) rotateY(-10deg) scale(1.12) translateZ(40px);
+}
 @keyframes bd-wall-float {
   from { filter: brightness(0.94); }
   to { filter: brightness(1.04); }
