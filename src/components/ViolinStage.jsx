@@ -3,6 +3,10 @@ import violinImg from "@/assets/violin.png.asset.json";
 
 /** key -> { note label, frequency } */
 const KEYS = {
+  a: { note: "A3", freq: 220.0 },
+  s: { note: "B3", freq: 246.94 },
+  d: { note: "C4", freq: 261.63 },
+  f: { note: "D4", freq: 293.66 },
   g: { note: "E4", freq: 329.63 },
   h: { note: "F4", freq: 349.23 },
   j: { note: "G4", freq: 392.0 },
