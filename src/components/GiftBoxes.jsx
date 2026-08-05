@@ -8,6 +8,7 @@ import lid3 from "@/assets/gift3-lid.png.asset.json";
 import base3 from "@/assets/gift3-base.png.asset.json";
 import veilComic from "@/assets/veil-comic.jpg.asset.json";
 import ViolinStage from "./ViolinStage.jsx";
+import MemoryWall from "./MemoryWall.jsx";
 
 const GIFTS = [
   { id: 1, lid: lid1.url, base: base1.url },
@@ -19,6 +20,7 @@ const GIFTS = [
 export default function GiftBoxes({ audioRef }) {
   const [open, setOpen] = useState({});
   const [violin, setViolin] = useState(false);
+  const [wall, setWall] = useState(false);
   const wasPlayingRef = useState({ current: false })[0];
 
   const openViolin = () => {
@@ -40,13 +42,32 @@ export default function GiftBoxes({ audioRef }) {
     }
   };
 
+  const openWall = () => {
+    const audio = audioRef && audioRef.current;
+    if (audio && !audio.paused) {
+      wasPlayingRef.current = true;
+      audio.pause();
+    }
+    setWall(true);
+  };
+
+  const exitWall = () => {
+    setWall(false);
+    const audio = audioRef && audioRef.current;
+    if (audio && wasPlayingRef.current) {
+      wasPlayingRef.current = false;
+      const p = audio.play();
+      if (p && p.catch) p.catch(() => {});
+    }
+  };
+
   const toggle = (id) => setOpen((o) => ({ ...o, [id]: !o[id] }));
   const close = (id) => setOpen((o) => ({ ...o, [id]: false }));
 
   const modalOpen = Boolean(open[1]);
 
   useEffect(() => {
-    if (!modalOpen && !violin) return;
+    if (!modalOpen && !violin && !wall) return;
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     const onKey = (e) => {
@@ -57,7 +78,7 @@ export default function GiftBoxes({ audioRef }) {
       document.body.style.overflow = prev;
       window.removeEventListener("keydown", onKey);
     };
-  }, [modalOpen, violin]);
+  }, [modalOpen, violin, wall]);
 
   return (
     <section className="bd-scene bd-gifts-scene">
@@ -95,6 +116,20 @@ export default function GiftBoxes({ audioRef }) {
           🎻 Play Violin
         </button>
       )}
+
+      {open[3] && (
+        <button
+          type="button"
+          className="bd-btn bd-fade-in"
+          style={{ marginTop: "1.4rem" }}
+          onClick={openWall}
+        >
+          🌌 Explore Memory Wall
+        </button>
+      )}
+
+      {wall && typeof document !== "undefined" &&
+        createPortal(<MemoryWall onExit={exitWall} />, document.body)}
 
       {violin && typeof document !== "undefined" &&
         createPortal(<ViolinStage onExit={exitViolin} />, document.body)}
