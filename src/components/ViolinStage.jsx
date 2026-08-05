@@ -211,7 +211,7 @@ export default function ViolinStage({ onExit }) {
       </button>
 
       <h2 className="bd-title bd-violin-title">Play the Violin</h2>
-      <p className="bd-sub">hold G H J K L · Q W E R T Y U I O P · Z X C V B N M to bow the strings</p>
+      <p className="bd-sub">hold A S D F G H J K L · Q W E R T Y U I O P · Z X C V B N M to bow the strings</p>
 
       <div className="bd-violin-stage">
         <img className={`bd-violin-img${Object.values(active).some(Boolean) ? " bowing" : ""}`} src={violinImg.url} alt="Violin" />
