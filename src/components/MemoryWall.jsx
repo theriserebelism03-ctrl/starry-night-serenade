@@ -39,6 +39,21 @@ const MERIDIANS = [0, 15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165];
 
 const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
 
+/** Inline SVG placeholder so a failed photo never renders as an empty card. */
+const PLACEHOLDER = (label = "Memory") =>
+  "data:image/svg+xml;utf8," +
+  encodeURIComponent(
+    `<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600">
+      <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#0b1430"/><stop offset="100%" stop-color="#000"/>
+      </linearGradient></defs>
+      <rect width="600" height="600" fill="url(#g)"/>
+      <circle cx="300" cy="255" r="86" fill="none" stroke="#d8b25a" stroke-width="4"/>
+      <text x="300" y="270" font-family="Georgia, serif" font-size="64" fill="#d8b25a" text-anchor="middle">&#9825;</text>
+      <text x="300" y="420" font-family="Georgia, serif" font-size="30" fill="rgba(255,255,255,.7)" text-anchor="middle">${label}</text>
+    </svg>`
+  );
+
 async function downloadImage(url, name) {
   try {
     const res = await fetch(url);
