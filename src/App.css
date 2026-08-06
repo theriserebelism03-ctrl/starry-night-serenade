@@ -929,6 +929,10 @@
   transition: box-shadow 0.35s ease, filter 0.35s ease;
   cursor: pointer;
   animation: bd-wall-float 7s ease-in-out infinite alternate;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  will-change: transform, filter;
+  isolation: isolate;
 }
 .bd-wall-card img {
   display: block;
@@ -937,6 +941,8 @@
   object-fit: cover;
   border-radius: 4px;
   user-select: none;
+  backface-visibility: hidden;
+  transform: translateZ(0.01px);
 }
 .bd-wall-card:hover {
   z-index: 5;

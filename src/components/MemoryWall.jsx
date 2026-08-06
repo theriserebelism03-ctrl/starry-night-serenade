@@ -177,7 +177,7 @@ export default function MemoryWall({ onExit }) {
         return;
       }
       const cur = viewRef.current;
-      setBoth({ ry: cur.ry + v.x, rx: clamp(cur.rx + v.y, -80, 80) });
+      setBoth({ ry: cur.ry - v.x, rx: clamp(cur.rx - v.y, -80, 80) });
       velRef.current = { x: v.x * 0.955, y: v.y * 0.955 };
     };
     rafRef.current = requestAnimationFrame(tick);
@@ -229,8 +229,8 @@ export default function MemoryWall({ onExit }) {
     d.lx = e.clientX;
     d.ly = e.clientY;
     setBoth({
-      ry: d.view.ry + dx * 0.25,
-      rx: clamp(d.view.rx - dy * 0.25, -80, 80),
+      ry: d.view.ry - dx * 0.25,
+      rx: clamp(d.view.rx + dy * 0.25, -80, 80),
     });
   };
 
@@ -294,7 +294,7 @@ export default function MemoryWall({ onExit }) {
               tabIndex={0}
               title="Click to download"
               style={{
-                transform: `rotateY(${c.lon}deg) rotateX(${-c.lat}deg) translateZ(${RADIUS}px)`,
+                transform: `rotateY(${c.lon}deg) rotateX(${-c.lat}deg) translateZ(${RADIUS + 24 + (i % 5) * 6}px)`,
                 animationDelay: `${i * 0.35}s`,
               }}
               onClick={() => downloadImage(c.url, c.name)}
