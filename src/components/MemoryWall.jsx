@@ -13,7 +13,10 @@ import photo10 from "@/assets/photo10.png.asset.json";
 
 const PHOTOS = [photo1, photo2, photo3, photo4, photo5, photo6, photo7, photo8, photo9, photo10];
 
-const RADIUS = 420;
+const RADIUS =
+  typeof window !== "undefined"
+    ? Math.max(520, Math.min(900, Math.min(window.innerWidth, window.innerHeight) * 0.95))
+    : 760;
 
 /** Deterministic pseudo-random scatter over the surface of a sphere. */
 const CARDS = PHOTOS.map((p, i) => {
@@ -152,6 +155,8 @@ export default function MemoryWall({ onExit }) {
   const stageRef = useRef(null);
   const dragRef = useRef(null);
   const viewRef = useRef({ rx: -8, ry: 0 });
+  const velRef = useRef({ x: 0, y: 0 });
+  const rafRef = useRef(null);
   const [view, setView] = useState(viewRef.current);
   const [dragging, setDragging] = useState(false);
 
@@ -159,6 +164,24 @@ export default function MemoryWall({ onExit }) {
     viewRef.current = next;
     setView(next);
   }, []);
+
+  // inertia: glide + decelerate after release
+  useEffect(() => {
+    const tick = () => {
+      rafRef.current = requestAnimationFrame(tick);
+      if (dragRef.current) return;
+      const v = velRef.current;
+      if (Math.abs(v.x) < 0.01 && Math.abs(v.y) < 0.01) {
+        if (v.x !== 0 || v.y !== 0) velRef.current = { x: 0, y: 0 };
+        return;
+      }
+      const cur = viewRef.current;
+      setBoth({ ry: cur.ry + v.x, rx: clamp(cur.rx + v.y, -80, 80) });
+      velRef.current = { x: v.x * 0.955, y: v.y * 0.955 };
+    };
+    rafRef.current = requestAnimationFrame(tick);
+    return () => rafRef.current && cancelAnimationFrame(rafRef.current);
+  }, [setBoth]);
 
   useEffect(() => {
     const onKey = (e) => {
@@ -178,10 +201,13 @@ export default function MemoryWall({ onExit }) {
   }, []);
 
   const onPointerDown = (e) => {
+    velRef.current = { x: 0, y: 0 };
     dragRef.current = {
       id: e.pointerId,
       sx: e.clientX,
       sy: e.clientY,
+      lx: e.clientX,
+      ly: e.clientY,
       view: viewRef.current,
       moved: false,
     };
@@ -195,6 +221,12 @@ export default function MemoryWall({ onExit }) {
     const dx = e.clientX - d.sx;
     const dy = e.clientY - d.sy;
     if (Math.abs(dx) > 4 || Math.abs(dy) > 4) d.moved = true;
+    velRef.current = {
+      x: velRef.current.x * 0.6 + (e.clientX - d.lx) * 0.25 * 0.4,
+      y: velRef.current.y * 0.6 - (e.clientY - d.ly) * 0.25 * 0.4,
+    };
+    d.lx = e.clientX;
+    d.ly = e.clientY;
     setBoth({
       ry: d.view.ry + dx * 0.25,
       rx: clamp(d.view.rx - dy * 0.25, -80, 80),
