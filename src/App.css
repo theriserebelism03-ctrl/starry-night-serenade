@@ -943,6 +943,10 @@
   user-select: none;
   backface-visibility: hidden;
   transform: translateZ(0.01px);
+  background: linear-gradient(140deg, rgba(12, 22, 52, 1), rgba(0, 0, 0, 1));
+}
+.bd-wall-card img.is-fallback {
+  object-fit: contain;
 }
 .bd-wall-card:hover {
   z-index: 5;
