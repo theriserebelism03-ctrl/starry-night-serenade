@@ -303,7 +303,32 @@ export default function MemoryWall({ onExit }) {
               }
             >
               <div className="bd-wall-card-inner">
-                <img src={c.url} alt="" draggable="false" loading="lazy" />
+                <img
+                  src={c.url}
+                  alt={c.name}
+                  draggable="false"
+                  loading="eager"
+                  decoding="async"
+                  crossOrigin="anonymous"
+                  onLoad={(e) => e.currentTarget.classList.add("is-loaded")}
+                  onError={(e) => {
+                    const el = e.currentTarget;
+                    if (el.dataset.fallback === "1") return;
+                    el.dataset.fallback = "1";
+                    el.removeAttribute("crossorigin");
+                    // retry once without CORS attribute, then fall back to a drawn placeholder
+                    const retry = new Image();
+                    retry.onload = () => {
+                      el.src = c.url;
+                      el.classList.add("is-loaded");
+                    };
+                    retry.onerror = () => {
+                      el.src = PLACEHOLDER(c.name);
+                      el.classList.add("is-loaded", "is-fallback");
+                    };
+                    retry.src = c.url;
+                  }}
+                />
               </div>
             </figure>
           ))}
