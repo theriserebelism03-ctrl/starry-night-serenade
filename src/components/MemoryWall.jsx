@@ -15,8 +15,8 @@ const PHOTOS = [photo1, photo2, photo3, photo4, photo5, photo6, photo7, photo8, 
 
 const RADIUS =
   typeof window !== "undefined"
-    ? Math.max(520, Math.min(900, Math.min(window.innerWidth, window.innerHeight) * 0.95))
-    : 760;
+    ? Math.max(900, Math.min(1600, Math.min(window.innerWidth, window.innerHeight) * 1.7))
+    : 1200;
 
 /** Deterministic pseudo-random scatter over the surface of a sphere. */
 const CARDS = PHOTOS.map((p, i) => {
@@ -33,8 +33,9 @@ const CARDS = PHOTOS.map((p, i) => {
   };
 });
 
-const RINGS = [-60, -30, 0, 30, 60];
-const MERIDIANS = [0, 30, 60, 90, 120, 150];
+// finer wireframe grid across the expanded sphere
+const RINGS = [-75, -60, -45, -30, -15, 0, 15, 30, 45, 60, 75];
+const MERIDIANS = [0, 15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165];
 
 const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
 
