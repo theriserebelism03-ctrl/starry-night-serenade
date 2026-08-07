@@ -18,16 +18,25 @@ const RADIUS =
     ? Math.max(900, Math.min(1600, Math.min(window.innerWidth, window.innerHeight) * 1.7))
     : 1200;
 
-/** Deterministic pseudo-random scatter over the surface of a sphere. */
-const CARDS = PHOTOS.map((p, i) => {
-  const n = PHOTOS.length;
-  const yy = 1 - ((i + 0.5) / n) * 2;
-  const jitter = (((i * 137) % 100) / 100 - 0.5) * 0.18;
-  const lat = Math.asin(Math.max(-1, Math.min(1, yy + jitter)));
-  const lon = (i * 2.399963 + ((i * 71) % 100) / 100) % (Math.PI * 2);
+/**
+ * Image sources for the sphere. Swap `url` values here to change the gallery —
+ * any entry left null falls back to a drawn placeholder card.
+ */
+const IMAGES = PHOTOS.map((p, i) => ({
+  url: p.url ?? null,
+  name: p.original_filename || `memory-${i + 1}.png`,
+}));
+
+const GOLDEN_ANGLE = Math.PI * (3 - Math.sqrt(5));
+
+/** Fibonacci sphere: even, non-clustered distribution facing outward. */
+const CARDS = IMAGES.map((img, i) => {
+  const n = IMAGES.length;
+  const y = 1 - ((i + 0.5) / n) * 2; // -1 .. 1
+  const lat = Math.asin(Math.max(-1, Math.min(1, y)));
+  const lon = (i * GOLDEN_ANGLE) % (Math.PI * 2);
   return {
-    url: p.url,
-    name: p.original_filename || `memory-${i + 1}.png`,
+    ...img,
     lat: (lat * 180) / Math.PI,
     lon: (lon * 180) / Math.PI,
   };
@@ -193,7 +202,7 @@ export default function MemoryWall({ onExit }) {
       }
       const cur = viewRef.current;
       setBoth({ ry: cur.ry - v.x, rx: clamp(cur.rx - v.y, -80, 80) });
-      velRef.current = { x: v.x * 0.955, y: v.y * 0.955 };
+      velRef.current = { x: v.x * 0.972, y: v.y * 0.972 };
     };
     rafRef.current = requestAnimationFrame(tick);
     return () => rafRef.current && cancelAnimationFrame(rafRef.current);
@@ -237,9 +246,10 @@ export default function MemoryWall({ onExit }) {
     const dx = e.clientX - d.sx;
     const dy = e.clientY - d.sy;
     if (Math.abs(dx) > 4 || Math.abs(dy) > 4) d.moved = true;
+    // exponential smoothing of pointer delta -> stable, jitter-free momentum
     velRef.current = {
-      x: velRef.current.x * 0.6 + (e.clientX - d.lx) * 0.25 * 0.4,
-      y: velRef.current.y * 0.6 - (e.clientY - d.ly) * 0.25 * 0.4,
+      x: velRef.current.x * 0.78 + (e.clientX - d.lx) * 0.25 * 0.22,
+      y: velRef.current.y * 0.78 - (e.clientY - d.ly) * 0.25 * 0.22,
     };
     d.lx = e.clientX;
     d.ly = e.clientY;
@@ -319,7 +329,7 @@ export default function MemoryWall({ onExit }) {
             >
               <div className="bd-wall-card-inner">
                 <img
-                  src={c.url}
+                  src={c.url || PLACEHOLDER(c.name)}
                   alt={c.name}
                   draggable="false"
                   loading="eager"
