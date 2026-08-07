@@ -29,6 +29,16 @@ const IMAGES = PHOTOS.map((p, i) => ({
 
 const GOLDEN_ANGLE = Math.PI * (3 - Math.sqrt(5));
 
+// warm the browser cache immediately so every card is decoded before it rotates into view
+if (typeof window !== "undefined") {
+  for (const img of IMAGES) {
+    if (!img.url) continue;
+    const pre = new Image();
+    pre.decoding = "async";
+    pre.src = img.url;
+  }
+}
+
 /** Fibonacci sphere: even, non-clustered distribution facing outward. */
 const CARDS = IMAGES.map((img, i) => {
   const n = IMAGES.length;
@@ -334,6 +344,7 @@ export default function MemoryWall({ onExit }) {
                   draggable="false"
                   loading="eager"
                   decoding="async"
+                  fetchPriority="high"
                   crossOrigin="anonymous"
                   onLoad={(e) => e.currentTarget.classList.add("is-loaded")}
                   onError={(e) => {
