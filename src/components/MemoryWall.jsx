@@ -344,6 +344,7 @@ export default function MemoryWall({ onExit }) {
                   draggable="false"
                   loading="eager"
                   decoding="async"
+                  fetchPriority="high"
                   crossOrigin="anonymous"
                   onLoad={(e) => e.currentTarget.classList.add("is-loaded")}
                   onError={(e) => {
