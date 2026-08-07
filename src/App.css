@@ -396,7 +396,7 @@
   position: relative;
   width: min(360px, 78vw);
   height: min(460px, 64vh);
-  perspective: 1000px;
+  perspective: 2600px;
 }
 .bd-polaroid {
   position: absolute;
