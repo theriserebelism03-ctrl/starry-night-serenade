@@ -921,10 +921,10 @@
   width: 400px;
   margin-left: -200px;
   margin-top: -160px;
-  padding: 16px 16px 52px;
+  padding: 0;
   border-radius: 8px;
-  background: rgba(255, 255, 255, 0.9);
-  box-shadow: 0 22px 60px rgba(0, 0, 0, 0.6);
+  background: transparent;
+  box-shadow: none;
   transform-style: preserve-3d;
   transition: box-shadow 0.35s ease, filter 0.35s ease;
   cursor: pointer;
