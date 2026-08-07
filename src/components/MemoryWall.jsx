@@ -13,10 +13,12 @@ import photo10 from "@/assets/photo10.png.asset.json";
 
 const PHOTOS = [photo1, photo2, photo3, photo4, photo5, photo6, photo7, photo8, photo9, photo10];
 
+// must stay well inside the CSS perspective (2600px) or near-side cards fall
+// behind the camera plane and stop rendering entirely
 const RADIUS =
   typeof window !== "undefined"
-    ? Math.max(900, Math.min(1600, Math.min(window.innerWidth, window.innerHeight) * 1.7))
-    : 1200;
+    ? Math.max(640, Math.min(1000, Math.min(window.innerWidth, window.innerHeight) * 1.4))
+    : 900;
 
 /**
  * Image sources for the sphere. Swap `url` values here to change the gallery —
@@ -345,7 +347,6 @@ export default function MemoryWall({ onExit }) {
                   loading="eager"
                   decoding="async"
                   fetchPriority="high"
-                  crossOrigin="anonymous"
                   onLoad={(e) => e.currentTarget.classList.add("is-loaded")}
                   onError={(e) => {
                     const el = e.currentTarget;
