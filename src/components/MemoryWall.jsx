@@ -19,10 +19,16 @@ const IMAGES = [photo1, photo2, photo3, photo4, photo5, photo6, photo7, photo8, 
 const PERSPECTIVE = 2200;
 
 /** Sphere radius kept safely inside the camera plane so no card is clipped. */
+// hard ceiling: cards sit at radius + ~40px, and anything at or past the
+// perspective origin (z >= PERSPECTIVE) is behind the camera plane and vanishes.
+const MAX_CARD_Z = PERSPECTIVE * 0.32;
+
 function computeRadius() {
-  if (typeof window === "undefined") return 460;
+  if (typeof window === "undefined") return 420;
   const m = Math.min(window.innerWidth, window.innerHeight);
-  return Math.max(300, Math.min(560, m * 0.62));
+  // scale to the viewport, then clamp so the whole sphere stays on screen and
+  // well in front of the camera plane at every size
+  return Math.max(220, Math.min(MAX_CARD_Z - 40, m * 0.58));
 }
 
 const GOLDEN_ANGLE = Math.PI * (3 - Math.sqrt(5));
