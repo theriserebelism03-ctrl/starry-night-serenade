@@ -16,20 +16,24 @@ const IMAGES = [photo1, photo2, photo3, photo4, photo5, photo6, photo7, photo8, 
   (p, i) => ({ url: p.url, name: p.original_filename || `memory-${i + 1}.png` })
 );
 
-const PERSPECTIVE = 2200;
+const PERSPECTIVE = 1800;
 
-/** Sphere radius kept safely inside the camera plane so no card is clipped. */
-// hard ceiling: cards sit at radius + ~40px, and anything at or past the
-// perspective origin (z >= PERSPECTIVE) is behind the camera plane and vanishes.
-const MAX_CARD_Z = PERSPECTIVE * 0.32;
+/** Camera sits INSIDE the sphere: distance from the sphere centre to the eye. */
+const EYE_FACTOR = 0.62;
 
 function computeRadius() {
-  if (typeof window === "undefined") return 420;
+  if (typeof window === "undefined") return 1000;
   const m = Math.min(window.innerWidth, window.innerHeight);
-  // scale to the viewport, then clamp so the whole sphere stays on screen and
-  // well in front of the camera plane at every size
-  return Math.max(220, Math.min(MAX_CARD_Z - 40, m * 0.58));
+  // generous dome: big enough that cards never crowd the eye
+  return Math.max(760, Math.min(1500, m * 1.5));
 }
+
+/**
+ * Push the whole sphere toward the viewer so the eye ends up inside it.
+ * Everything at z >= PERSPECTIVE is behind the observer and simply isn't drawn,
+ * which is exactly the 360° dome behaviour we want.
+ */
+const eyeShift = (radius) => PERSPECTIVE - radius * EYE_FACTOR;
 
 const GOLDEN_ANGLE = Math.PI * (3 - Math.sqrt(5));
 
@@ -171,7 +175,7 @@ export default function MemoryWall({ onExit }) {
   const stageRef = useRef(null);
   const dragRef = useRef(null);
   const viewRef = useRef({ rx: -10, ry: 0 });
-  const velRef = useRef({ x: 0.12, y: 0 });
+  const targetRef = useRef({ rx: -10, ry: 0 });
   const rafRef = useRef(null);
   const [view, setView] = useState(viewRef.current);
   const [dragging, setDragging] = useState(false);
@@ -192,26 +196,24 @@ export default function MemoryWall({ onExit }) {
     }
   }, []);
 
-  const setBoth = useCallback((next) => {
-    viewRef.current = next;
-    setView(next);
-  }, []);
-
-  // inertia + gentle idle drift
+  // butter-smooth lerp toward the target orientation + gentle idle drift
   useEffect(() => {
+    const LERP = 0.065;
     const tick = () => {
       rafRef.current = requestAnimationFrame(tick);
-      if (dragRef.current) return;
-      const v = velRef.current;
-      const idle = Math.abs(v.x) < 0.12 && Math.abs(v.y) < 0.02 ? 0.12 : 0;
-      const vx = idle || v.x;
+      const t = targetRef.current;
+      if (!dragRef.current) t.ry += 0.05; // weightless continuous drift
       const cur = viewRef.current;
-      setBoth({ ry: cur.ry + vx, rx: clamp(cur.rx + v.y, -75, 75) });
-      velRef.current = idle ? { x: 0.12, y: v.y * 0.94 } : { x: v.x * 0.975, y: v.y * 0.975 };
+      const next = {
+        rx: cur.rx + (clamp(t.rx, -80, 80) - cur.rx) * LERP,
+        ry: cur.ry + (t.ry - cur.ry) * LERP,
+      };
+      viewRef.current = next;
+      setView(next);
     };
     rafRef.current = requestAnimationFrame(tick);
     return () => rafRef.current && cancelAnimationFrame(rafRef.current);
-  }, [setBoth]);
+  }, []);
 
   useEffect(() => {
     const onKey = (e) => {
@@ -230,14 +232,11 @@ export default function MemoryWall({ onExit }) {
   }, []);
 
   const onPointerDown = (e) => {
-    velRef.current = { x: 0, y: 0 };
     dragRef.current = {
       id: e.pointerId,
       sx: e.clientX,
       sy: e.clientY,
-      lx: e.clientX,
-      ly: e.clientY,
-      view: viewRef.current,
+      view: { ...targetRef.current },
     };
     e.currentTarget.setPointerCapture(e.pointerId);
     setDragging(true);
@@ -246,16 +245,10 @@ export default function MemoryWall({ onExit }) {
   const onPointerMove = (e) => {
     const d = dragRef.current;
     if (!d || d.id !== e.pointerId) return;
-    velRef.current = {
-      x: velRef.current.x * 0.75 + (e.clientX - d.lx) * 0.06,
-      y: velRef.current.y * 0.75 - (e.clientY - d.ly) * 0.06,
-    };
-    d.lx = e.clientX;
-    d.ly = e.clientY;
-    setBoth({
+    targetRef.current = {
       ry: d.view.ry + (e.clientX - d.sx) * 0.25,
-      rx: clamp(d.view.rx - (e.clientY - d.sy) * 0.25, -75, 75),
-    });
+      rx: clamp(d.view.rx - (e.clientY - d.sy) * 0.25, -80, 80),
+    };
   };
 
   const endDrag = () => {
@@ -278,7 +271,9 @@ export default function MemoryWall({ onExit }) {
       >
         <div
           className="bd-wall-space"
-          style={{ transform: `rotateX(${view.rx}deg) rotateY(${view.ry}deg)` }}
+          style={{
+            transform: `translateZ(${eyeShift(radius)}px) rotateX(${view.rx}deg) rotateY(${view.ry}deg)`,
+          }}
         >
           {RINGS.map((lat) => {
             const r = radius * Math.cos((lat * Math.PI) / 180);
@@ -318,7 +313,7 @@ export default function MemoryWall({ onExit }) {
               tabIndex={0}
               title="Click to download"
               style={{
-                transform: `rotateY(${c.lon}deg) rotateX(${-c.lat}deg) translateZ(${radius + 18 + (i % 4) * 5}px)`,
+                transform: `rotateY(${c.lon}deg) rotateX(${-c.lat}deg) translateZ(${radius + 18 + (i % 4) * 5}px) rotateY(180deg)`,
               }}
               onClick={() => downloadImage(c.url, c.name)}
               onKeyDown={(e) =>
