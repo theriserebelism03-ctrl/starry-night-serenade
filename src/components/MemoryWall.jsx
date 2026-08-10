@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import photo1 from "@/assets/photo1.png.asset.json";
 import photo2 from "@/assets/photo2.png.asset.json";
