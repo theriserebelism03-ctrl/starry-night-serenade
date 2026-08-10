@@ -906,9 +906,9 @@
 .bd-wall-card {
   position: absolute;
   margin: 0;
-  width: 240px;
-  margin-left: -120px;
-  margin-top: -90px;
+  width: 320px;
+  margin-left: -160px;
+  margin-top: -120px;
   padding: 0;
   transform-style: preserve-3d;
   transition: filter 0.35s ease;
