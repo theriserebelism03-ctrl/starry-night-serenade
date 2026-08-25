@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Tech stack marquee for README: dark starry theme, continuous horizontal scroll -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 140" width="1200" height="140" role="img" aria-label="Tech stack marquee">
+  <defs>
+    <linearGradient id="bgGrad" x1="0" x2="1">
+      <stop offset="0%" stop-color="#030B1E" />
+      <stop offset="100%" stop-color="#081B3B" />
+    </linearGradient>
+
+    <filter id="softGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <style><![CDATA[
+      :root { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; }
+      .container { fill: url(#bgGrad); rx: 14; ry: 14; filter: url(#softGlow); opacity: 0.95; }
+      .inner-mask { overflow: hidden; }
+      .track { transform-origin: 0 0; }
+      @keyframes infiniteMarquee {
+        0% { transform: translateX(-50%); }
+        100% { transform: translateX(0%); }
+      }
+      .track { animation: infiniteMarquee 20s linear infinite; }
+
+      .badge { cursor: default; transition: filter 180ms ease, transform 180ms ease; }
+      .badge:hover { transform: translateY(-4px); filter: drop-shadow(0 6px 10px rgba(0,0,0,0.6)) drop-shadow(0 0 8px rgba(130,200,255,0.18)); }
+
+      .label { font-size: 14px; fill: #E6F3FF; letter-spacing: 0.2px; }
+      .label-glow { filter: drop-shadow(0 0 6px rgba(100,160,255,0.14)); }
+
+      /* individual badge tweaks */
+      .bg-badge { fill: rgba(255,255,255,0.03); stroke: rgba(255,255,255,0.04); }
+
+      /* make smaller screens look nicer */
+      @media (max-width: 640px) {
+        .label { font-size: 12px; }
+      }
+    ]]></style>
+  </defs>
+
+  <!-- Card background -->
+  <rect class="container" x="10" y="10" width="1180" height="120" rx="12" />
+
+  <!-- Clip area so overflowing duplicates are hidden -->
+  <g transform="translate(20,20)">
+    <rect x="0" y="0" width="1160" height="100" rx="10" fill="transparent" />
+
+    <!-- marquee viewport -->
+    <svg x="0" y="0" width="1160" height="100" viewBox="0 0 1160 100" preserveAspectRatio="xMidYMid meet">
+      <g class="inner-mask" clip-path="url(#mClip)">
+        <defs>
+          <clipPath id="mClip"><rect x="0" y="0" width="1160" height="100" rx="10" /></clipPath>
+        </defs>
+
+        <!-- Two identical tracks to make seamless loop -->
+        <g class="track" id="trackGroup">
+
+          <!-- First copy -->
+          <g id="copy1" transform="translate(0,0)">
+            <!-- Badge 1: React -->
+            <g class="badge" transform="translate(20,10)">
+              <rect class="bg-badge" x="0" y="0" width="220" height="80" rx="8" />
+              <!-- React atom -->
+              <g transform="translate(32,40) scale(0.9)" aria-hidden="true">
+                <ellipse cx="18" cy="0" rx="28" ry="8" fill="none" stroke="#61DAFB" stroke-width="3" opacity="0.95" transform="rotate(30 18 0)" />
+                <ellipse cx="18" cy="0" rx="28" ry="8" fill="none" stroke="#61DAFB" stroke-width="3" opacity="0.95" transform="rotate(-30 18 0)" />
+                <ellipse cx="18" cy="0" rx="28" ry="8" fill="none" stroke="#61DAFB" stroke-width="3" opacity="0.95"/>
+                <circle cx="18" cy="0" r="6" fill="#61DAFB" />
+              </g>
+              <text class="label label-glow" x="110" y="50" text-anchor="middle">React · 18.x</text>
+            </g>
+
+            <!-- Badge 2: Vite -->
+            <g class="badge" transform="translate(260,10)">
+              <rect class="bg-badge" x="0" y="0" width="220" height="80" rx="8" />
+              <!-- Vite mark: stylized lightning/triangle -->
+              <g transform="translate(34,24) scale(1.4)" aria-hidden="true">
+                <path d="M6 0 L22 0 L6 20 L14 20 L6 36 L34 8 L18 8 L34 0 Z" fill="#FFEA2D"/>
+                <path d="M6 0 L22 0 L6 20 L14 20 L6 36 L34 8 L18 8 L34 0 Z" fill="none" stroke="#6A5CFF" stroke-width="1.6" opacity="0.9"/>
+              </g>
+              <text class="label" x="110" y="50" text-anchor="middle">Vite · 5.x</text>
+            </g>
+
+            <!-- Badge 3: Pure CSS + JS -->
+            <g class="badge" transform="translate(500,10)">
+              <rect class="bg-badge" x="0" y="0" width="220" height="80" rx="8" />
+              <g transform="translate(28,18)">
+                <circle cx="22" cy="22" r="18" fill="#E8C97A" />
+                <text x="22" y="27" text-anchor="middle" font-size="12" fill="#1B1B1B" font-weight="700">CSS</text>
+                <text x="54" y="27" text-anchor="middle" font-size="12" fill="#1B1B1B" font-weight="700">+ JS</text>
+                <!-- subtle golden pulse -->
+                <animate attributeName="opacity" values="0.9;0.6;0.9" dur="3.4s" repeatCount="indefinite" />
+              </g>
+              <text class="label" x="110" y="50" text-anchor="middle">Animations · Pure CSS + JS</text>
+            </g>
+
+            <!-- Badge 4: Web Audio API -->
+            <g class="badge" transform="translate(740,10)">
+              <rect class="bg-badge" x="0" y="0" width="220" height="80" rx="8" />
+              <g transform="translate(36,30)" aria-hidden="true">
+                <path d="M0 8 C6 2, 12 2, 18 8 C24 14, 30 14, 36 8 C42 2, 48 2, 54 8" fill="none" stroke="#0A84FF" stroke-width="3" stroke-linecap="round" />
+                <circle cx="12" cy="8" r="3" fill="#0A84FF" />
+              </g>
+              <text class="label" x="110" y="50" text-anchor="middle">Web Audio API</text>
+            </g>
+
+            <!-- Badge 5: TypeScript -->
+            <g class="badge" transform="translate(980,10)">
+              <rect class="bg-badge" x="0" y="0" width="220" height="80" rx="8" />
+              <g transform="translate(34,26)" aria-hidden="true">
+                <rect x="0" y="0" width="44" height="44" rx="6" fill="#3178C6" />
+                <text x="22" y="30" text-anchor="middle" font-size="20" font-weight="700" fill="#fff">TS</text>
+              </g>
+              <text class="label" x="110" y="50" text-anchor="middle">TypeScript</text>
+            </g>
+          </g>
+
+          <!-- Second copy: positioned exactly +1160 to create repeating strip -->
+          <g id="copy2" transform="translate(1160,0)">
+            <use href="#copy1" />
+          </g>
+
+        </g>
+      </g>
+    </svg>
+  </g>
+</svg>
