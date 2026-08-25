@@ -31,10 +31,10 @@ const PERSPECTIVE = 1800;
 const EYE_FACTOR = 0.62;
 
 function computeRadius() {
-  if (typeof window === "undefined") return 1200;
+  if (typeof window === "undefined") return 1600;
   const m = Math.min(window.innerWidth, window.innerHeight);
   // generous dome: big enough that cards never crowd the eye
-  return Math.max(900, Math.min(1800, m * 1.8));
+  return Math.max(1600, Math.min(2800, m * 2.5));
 }
 
 /**
