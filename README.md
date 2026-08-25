@@ -3,6 +3,11 @@
   <img src="./public/assets/header.svg" alt="Starry Night Serenade Header" width="100%" />
 </p>
 
+<!-- Tech stack marquee: dark starry card with continuous horizontal scroll -->
+<p align="center">
+  <img src="./public/assets/tech-marquee.svg" alt="Tech stack marquee — React, Vite, Pure CSS+JS, Web Audio API, TypeScript" width="100%" />
+</p>
+
 <!-- TAGLINE & BADGES -->
 <p align="center">
   <em>✨ A cinematic, romantic single-page experience built with zero external animation libraries ✨</em>
@@ -19,7 +24,7 @@
 
 ## 🌌 Overview
 
-**Starry Night Serenade** is a hand-crafted, high-performance web presentation engineered without any external animation CDNs (no GSAP, Framer Motion, or Lenis). All interactions rely strictly on Pure CSS, JavaScript requestAnimationFrame, and native Web APIs.
+**Starry Night Serenade** is a hand-crafted, high-performance web presentation engineered without any external animation CDNs (no GSAP, Framer Motion, or Lenis). All interactions rely strictly on [...]
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
