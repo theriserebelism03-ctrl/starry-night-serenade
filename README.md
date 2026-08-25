@@ -1,108 +1,58 @@
-# Starry Night Serenade
+<!-- ANIMATED HEADER WAVE / BANNER -->
+<p align="center">
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=071A3D&height=220&section=header&text=Starry%20Night%20Serenade&fontSize=42&fontColor=E8C97A&animation=twinkling" alt="Header Banner" width="100%" />
+</p>
 
-You are an expert React + Vite developer and creative frontend/UI designer.
+<!-- TAGLINE & BADGES -->
+<p align="center">
+  <em>✨ A cinematic, romantic single-page experience built with zero external animation libraries ✨</em>
+</p>
 
-Build a premium, cinematic, romantic single-page birthday website using React
-(functional components + hooks only, no class components) and Vite as the
-build tool. No animation libraries (no GSAP, no Framer Motion, no Lenis) —
-everything must be pure CSS animations/transitions plus vanilla JS via
-requestAnimationFrame, IntersectionObserver, and scroll events. This is a
-hard requirement: nothing should depend on an external CDN script, so a
-blocked network request can never silently break the page.
+<p align="center">
+  <img src="https://img.shields.io/badge/React-18.x-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="React" />
+  <img src="https://img.shields.io/badge/Vite-5.x-646CFF?style=for-the-badge&logo=vite&logoColor=white" alt="Vite" />
+  <img src="https://img.shields.io/badge/Animations-Pure%20CSS%20%2B%20JS-E8C97A?style=for-the-badge" alt="Pure CSS" />
+  <img src="https://img.shields.io/badge/Audio-Web%20Audio%20API-071A3D?style=for-the-badge" alt="Web Audio" />
+</p>
 
-THEME
-- Colors: Navy Blue (#071A3D), Black (#000000), Gold (#E8C97A), White
-- Glassmorphism cards, soft shadows, twinkling star canvas background
-- Georgia / Cormorant Garamond serif typography throughout
+---
 
-CURSOR
-- Keep the real system cursor visible (do NOT hide it with cursor:none)
-- Two small butterfly sprites (CSS-drawn, flapping wings) trail the cursor
-  with slightly different easing/offsets, continuously, on every scene
+## 🌌 Overview
 
-SCENE 1 — LOCK SCREEN
-- Circular profile photo, "Enter Password" title
-- 4-digit password input, hardcoded password "2808"
-- "Forgot Password?" reveals "Password : 2808 ❤️" on click
-- Wrong password: card shake animation + red glow on the input + a short
-  synthesized error tone via the Web Audio API (no external sound file)
-- Correct password: fade to black, then into Scene 2
+**Starry Night Serenade** is a hand-crafted, high-performance web presentation engineered without any external animation CDNs (no GSAP, Framer Motion, or Lenis). All interactions rely strictly on **Pure CSS Keyframes**, **`requestAnimationFrame`**, and the **IntersectionObserver API**.
+---
 
-SCENE 2 — GRAMOPHONE (music player)
-- Antique gramophone image, glowing when a song plays
-- Two selectable "vinyl disc" thumbnails (song jukebox), each labeled with
-  a track name — clicking one plays that track and spins that disc via a
-  pure CSS @keyframes rotation; clicking the other switches tracks cleanly
-- If the first track finishes untouched, auto-chain into the second track
-  with no gap (no pause between songs)
-- Do NOT include any countdown timer or track-duration display — instead,
-  show a "Continue the journey →" button as soon as a song has been chosen
+## ✨ Key Motion Features & Interactions
 
-SCENE 3 — MEMORY GALLERY
-- Grid of 10 "polaroid" photos that fade/scale into view as the user
-  scrolls them into the viewport, using IntersectionObserver (not a
-  library), staggered slightly per card
+* **🦋 Dual Butterfly Cursor Trail** — Two CSS-drawn butterfly sprites track system cursor movements with independent spring easing.
+* **🔒 Web Audio Haptic Lock Screen** — Custom synthesized error frequency tones on incorrect attempts, with a full black transition on success.
+* **💿 Continuous Vinyl Jukebox** — Seamless auto-chaining vinyl rotation without track duration timers or audio gaps.
+* **⛵ 380vh Scroll-Driven Boat Physics** — Dual-layer transform setup separating continuous bobbing/pitching keyframes from 3D scroll-driven path swaying.
 
-SCENE 4 — BOAT JOURNEY (scroll-driven, not a left-to-right slide)
-- A tall (~380vh) scroll section with a `position: sticky` viewport
-- As the user scrolls DOWN, the boat should feel like it's moving FORWARD
-  through the water (not sliding horizontally, not shrinking into the
-  distance): scale up gently, sway along a natural S-curve path, while
-  3 parallax water layers race underneath it
-- Independently of scroll, the boat must ALSO have continuous, realistic
-  sailing physics at all times: gentle bobbing (translateY) and pitching
-  (rotate), driven by its own always-on CSS @keyframes animation — never a
-  static-looking image. Implement this as two separate transformed layers
-  (an outer one for scroll-driven scale/sway, an inner one for the
-  continuous physics loop) so the two transforms never overwrite each other
-- A slideshow of visited-place labels (icon + text) slides in from the
-  left edge, one per scroll segment, synced to scroll progress, then slides
-  back out before the next appears
-- Do NOT include any falling flower petals, flower bursts, or floating
-  petal effects anywhere in this scene or any other scene in the site
+---
 
-SCENE 5 — HELLO KITTY
-- Character walks in from off-screen with a bounce, carrying a bouquet
-- Clicking her reveals a handwritten-style letter overlay (parchment
-  background, cursive font, "Close Letter" button) — no flower burst effect
+## 🛠️ Tech Stack
 
-SCENE 6 — CAT
-- Grey/black cat walks in carrying a rose
-- Clicking the rose blooms it (scale-up transition) and reveals an
-  "About Rukmani" placeholder info card with a "Close" button
+| Domain | Technologies Used |
+| :--- | :--- |
+| **Framework & Build** | React 18 (Functional Hooks), Vite, TypeScript |
+| **Styling & Theme** | Pure CSS3 (Glassmorphism, CSS Variables, Custom Serif Typography) |
+| **Audio Engine** | Web Audio API (Synthesizers), HTML5 Audio Element |
+| **Performance** | IntersectionObserver, `requestAnimationFrame`, Zero Third-Party Motion CDNs |
 
-SCENE 7 — FINAL
-- "Thank You ❤️" with a moon, and an "Exit" button that fades to black,
-  stops all audio, resets every piece of state, and returns to Scene 1
-  ready to replay
+---
 
-GENERAL RULES
-- No falling flowers / floating petals ANYWHERE (explicitly removed)
-- No music timer / countdown / track-duration display anywhere
-- All images/audio are referenced from the /public folder with a leading
-  slash (e.g. /photo1.png), never embedded as base64
-- Structure as: src/App.jsx (scene state machine) + src/components/*.jsx
-  (one component per scene/feature) + src/App.css (all styles)
-- Clean, modular, commented code; ready to run with `npm install && npm run dev`
-  and deploy to Vercel via GitHub with zero extra config
+## 🚀 Quick Start
 
-This project was built with [Lovable](https://lovable.dev).
+```bash
+# Clone the repository
+git clone [https://github.com/theriserebelism03-ctrl/starry-night-serenade.git](https://github.com/theriserebelism03-ctrl/starry-night-serenade.git)
 
-## Build with Lovable
+# Navigate into project directory
+cd starry-night-serenade
 
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/f6bab471-06e0-446d-a27d-5a8dd2a06b50).
+# Install dependencies via Bun
+bun install
 
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: every change made in Lovable is committed straight to this repository.
-- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
-
-## Development
-
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
-
-```sh
-git clone <this-repository-url>
-cd <repository-name>
-npm i
-npm run dev
-```
+# Start local development server
+bun run dev
