@@ -12,9 +12,18 @@ import photo9 from "@/assets/photo9.png.asset.json";
 import photo10 from "@/assets/photo10.png.asset.json";
 
 /** Swap/extend this list freely — layout recalculates for any count. */
-const IMAGES = [photo1, photo2, photo3, photo4, photo5, photo6, photo7, photo8, photo9, photo10].map(
-  (p, i) => ({ url: p.url, name: p.original_filename || `memory-${i + 1}.png` })
-);
+const IMAGES = [
+  photo1,
+  photo2,
+  photo3,
+  photo4,
+  photo5,
+  photo6,
+  photo7,
+  photo8,
+  photo9,
+  photo10,
+].map((p, i) => ({ url: p.url, name: p.original_filename || `memory-${i + 1}.png` }));
 
 const PERSPECTIVE = 1800;
 
@@ -22,10 +31,10 @@ const PERSPECTIVE = 1800;
 const EYE_FACTOR = 0.62;
 
 function computeRadius() {
-  if (typeof window === "undefined") return 1000;
+  if (typeof window === "undefined") return 1200;
   const m = Math.min(window.innerWidth, window.innerHeight);
   // generous dome: big enough that cards never crowd the eye
-  return Math.max(760, Math.min(1500, m * 1.5));
+  return Math.max(900, Math.min(1800, m * 1.8));
 }
 
 /**
@@ -58,7 +67,7 @@ const PLACEHOLDER = (label = "Memory") =>
       <rect width="600" height="450" fill="#05070f"/>
       <text x="300" y="230" font-family="Georgia, serif" font-size="56" fill="#d8b25a" text-anchor="middle">&#9825;</text>
       <text x="300" y="310" font-family="Georgia, serif" font-size="26" fill="rgba(255,255,255,.65)" text-anchor="middle">${label}</text>
-    </svg>`
+    </svg>`,
   );
 
 async function downloadImage(url, name) {
@@ -247,7 +256,7 @@ export default function MemoryWall({ onExit }) {
     if (!d || d.id !== e.pointerId) return;
     targetRef.current = {
       ry: d.view.ry + (e.clientX - d.sx) * 0.25,
-      rx: clamp(d.view.rx - (e.clientY - d.sy) * 0.25, -80, 80),
+      rx: d.view.rx,
     };
   };
 
@@ -268,6 +277,8 @@ export default function MemoryWall({ onExit }) {
         onPointerMove={onPointerMove}
         onPointerUp={endDrag}
         onPointerCancel={endDrag}
+        onPointerLeave={endDrag}
+        onLostPointerCapture={endDrag}
       >
         <div
           className="bd-wall-space"
