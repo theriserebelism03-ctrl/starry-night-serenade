@@ -1,6 +1,6 @@
 <!-- ANIMATED HEADER WITH WAVING CONTINUOUS MOTION -->
 <p align="center">
-  <img src="https://capsule-render.vercel.app/api?type=waving&color=071A3D&height=220&section=header&text=STARRY%20NIGHT%20SERENADE&fontSize=40&fontColor=FFE600&animation=waving" alt="Header Banner" width="100%" />
+  <img src="./assets/header.svg" alt="Starry Night Serenade Header" width="100%" />
 </p>
 
 <!-- TAGLINE & BADGES -->
