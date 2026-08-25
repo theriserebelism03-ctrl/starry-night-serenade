@@ -20,13 +20,15 @@
 ## 🌌 Overview
 
 **Starry Night Serenade** is a hand-crafted, high-performance web presentation engineered without any external animation CDNs (no GSAP, Framer Motion, or Lenis). All interactions rely strictly on **Pure CSS Keyframes**, **`requestAnimationFrame`**, and the **IntersectionObserver API**.
-─────────────────────────────────────────────────────────────┐
+┌─────────────────────────────────────────────────────────────┐
 │ 🔐 Scene 1: Lock Screen (Password: 2808)                    │
 │ 🎵 Scene 2: Antique Gramophone Jukebox                      │
 │ 📸 Scene 3: Scroll-Triggered Polaroid Gallery               │
 │ ⛵ Scene 4: 380vh Sticky Parallax Boat Journey              │
 │ 💌 Scene 5: Hello Kitty Interactive Letter                  │
 └─────────────────────────────────────────────────────────────┘
+
+
 ---
 
 ## ✨ Key Motion Features & Interactions
