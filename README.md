@@ -1,6 +1,6 @@
-<!-- ANIMATED HEADER WAVE / BANNER -->
+<!-- CONTINUOUSLY MOVING ANIMATED HEADER WAVE -->
 <p align="center">
-  <img src="https://capsule-render.vercel.app/api?type=waving&color=071A3D&height=220&section=header&text=Starry%20Night%20Serenade&fontSize=42&fontColor=E8C97A&animation=twinkling" alt="Header Banner" width="100%" />
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=071A3D&height=220&section=header&text=Starry%20Night%20Serenade&fontSize=42&fontColor=E8C97A&animation=waving" alt="Header Banner" width="100%" />
 </p>
 
 <!-- TAGLINE & BADGES -->
@@ -20,6 +20,13 @@
 ## 🌌 Overview
 
 **Starry Night Serenade** is a hand-crafted, high-performance web presentation engineered without any external animation CDNs (no GSAP, Framer Motion, or Lenis). All interactions rely strictly on **Pure CSS Keyframes**, **`requestAnimationFrame`**, and the **IntersectionObserver API**.
+─────────────────────────────────────────────────────────────┐
+│ 🔐 Scene 1: Lock Screen (Password: 2808)                    │
+│ 🎵 Scene 2: Antique Gramophone Jukebox                      │
+│ 📸 Scene 3: Scroll-Triggered Polaroid Gallery               │
+│ ⛵ Scene 4: 380vh Sticky Parallax Boat Journey              │
+│ 💌 Scene 5: Hello Kitty Interactive Letter                  │
+└─────────────────────────────────────────────────────────────┘
 ---
 
 ## ✨ Key Motion Features & Interactions
