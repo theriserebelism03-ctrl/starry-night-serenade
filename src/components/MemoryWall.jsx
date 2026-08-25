@@ -185,6 +185,7 @@ export default function MemoryWall({ onExit }) {
   const dragRef = useRef(null);
   const viewRef = useRef({ rx: -10, ry: 0 });
   const targetRef = useRef({ rx: -10, ry: 0 });
+  const velocityRef = useRef({ rx: 0, ry: 0 });
   const rafRef = useRef(null);
   const [view, setView] = useState(viewRef.current);
   const [dragging, setDragging] = useState(false);
@@ -205,16 +206,23 @@ export default function MemoryWall({ onExit }) {
     }
   }, []);
 
-  // butter-smooth lerp toward the target orientation + gentle idle drift
+  // Butter-smooth lerp toward the target orientation with inertial release.
   useEffect(() => {
     const LERP = 0.065;
+    const DAMPING = 0.94;
     const tick = () => {
       rafRef.current = requestAnimationFrame(tick);
       const t = targetRef.current;
-      if (!dragRef.current) t.ry += 0.05; // weightless continuous drift
+      const velocity = velocityRef.current;
+      if (!dragRef.current) {
+        t.rx += velocity.rx;
+        t.ry += velocity.ry;
+        velocity.rx *= DAMPING;
+        velocity.ry *= DAMPING;
+      }
       const cur = viewRef.current;
       const next = {
-        rx: cur.rx + (clamp(t.rx, -80, 80) - cur.rx) * LERP,
+        rx: cur.rx + (t.rx - cur.rx) * LERP,
         ry: cur.ry + (t.ry - cur.ry) * LERP,
       };
       viewRef.current = next;
@@ -246,7 +254,10 @@ export default function MemoryWall({ onExit }) {
       sx: e.clientX,
       sy: e.clientY,
       view: { ...targetRef.current },
+      x: e.clientX,
+      y: e.clientY,
     };
+    velocityRef.current = { rx: 0, ry: 0 };
     e.currentTarget.setPointerCapture(e.pointerId);
     setDragging(true);
   };
@@ -254,10 +265,17 @@ export default function MemoryWall({ onExit }) {
   const onPointerMove = (e) => {
     const d = dragRef.current;
     if (!d || d.id !== e.pointerId) return;
+    const dx = e.clientX - d.x;
+    const dy = e.clientY - d.y;
+    const nextVelocity = velocityRef.current;
+    nextVelocity.ry = nextVelocity.ry * 0.65 - dx * 0.25 * 0.35;
+    nextVelocity.rx = nextVelocity.rx * 0.65 + dy * 0.25 * 0.35;
     targetRef.current = {
-      ry: d.view.ry + (e.clientX - d.sx) * 0.25,
-      rx: d.view.rx,
+      ry: d.view.ry - (e.clientX - d.sx) * 0.25,
+      rx: d.view.rx + (e.clientY - d.sy) * 0.25,
     };
+    d.x = e.clientX;
+    d.y = e.clientY;
   };
 
   const endDrag = () => {
